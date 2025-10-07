@@ -4,13 +4,9 @@ import { useEffect, useRef } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 // import AiLoader from "./AiLoader"
 import { Response } from "@/components/ai-elements/response"
+import { Message } from "@/types"
 
 
-export interface Message {
-    id: string
-    role: "user" | "assistant"
-    content: string
-}
 
 interface ChatMessagesProps {
     messages: Message[]
@@ -72,7 +68,7 @@ export default function ChatMessages({ messages, isLoading }: ChatMessagesProps)
             ) : (
                 <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
                     {messages.map((message) => {
-                        const isUser = message.role === "user"
+                        const isUser = message.role === "USER"
                         return (
                             <div key={message.id} className={`flex items-start gap-1 md:gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
                                 {!isUser && (
@@ -96,7 +92,7 @@ export default function ChatMessages({ messages, isLoading }: ChatMessagesProps)
 
                                 {isUser && (
                                     <Avatar className="h-8 w-8 mt-0.5 shrink-0">
-                                        <AvatarImage src="/placeholder-user.jpg" alt="You" />
+                                        <AvatarImage src="/" alt="You" />
                                         <AvatarFallback>U</AvatarFallback>
                                     </Avatar>
                                 )}

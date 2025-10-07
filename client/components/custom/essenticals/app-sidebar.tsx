@@ -20,6 +20,10 @@ import { Button } from "@/components/ui/button"
 import Logo from "./logo"
 import { NavUser } from "./nav-user"
 import Link from "next/link"
+import { useConversationsQuery } from "@/lib/query"
+import { Conversation } from "@/types"
+import { Spinner } from "@/components/ui/spinner"
+import { usePathname, useRouter } from "next/navigation"
 
 const items = [
     {
@@ -34,90 +38,16 @@ const items = [
     }
 ]
 
-const history = [
-    {
-        title: "Importance of AI",
-        url: "/app/post/1",
-        createdAt: new Date("2024-01-15"),
-        updatedAt: new Date("2024-01-15"),
-    }, {
-        title: "The future of AI",
-        url: "/app/post/2",
-        createdAt: new Date("2024-01-18"),
-        updatedAt: new Date("2024-01-18"),
-    }, {
-        title: "The best books for self improvement",
-        url: "/app/post/3",
-        createdAt: new Date("2024-01-22"),
-        updatedAt: new Date("2024-01-22"),
-    }, {
-        title: "Top skills for 2025",
-        url: "/app/post/4",
-        createdAt: new Date("2024-01-25"),
-        updatedAt: new Date("2024-01-25"),
-    }, {
-        title: "Machine Learning Fundamentals",
-        url: "/app/post/5",
-        createdAt: new Date("2024-02-03"),
-        updatedAt: new Date("2024-02-03"),
-    }, {
-        title: "Web Development Trends 2024",
-        url: "/app/post/6",
-        createdAt: new Date("2024-02-10"),
-        updatedAt: new Date("2024-02-10"),
-    }, {
-        title: "Cloud Computing Explained",
-        url: "/app/post/7",
-        createdAt: new Date("2024-02-17"),
-        updatedAt: new Date("2024-02-17"),
-    }, {
-        title: "Data Science Career Guide",
-        url: "/app/post/8",
-        createdAt: new Date("2024-02-24"),
-        updatedAt: new Date("2024-02-24"),
-    }, {
-        title: "Cybersecurity Best Practices",
-        url: "/app/post/9",
-        createdAt: new Date("2024-03-02"),
-        updatedAt: new Date("2024-03-02"),
-    }, {
-        title: "Blockchain Technology Overview",
-        url: "/app/post/10",
-        createdAt: new Date("2024-03-09"),
-        updatedAt: new Date("2024-03-09"),
-    }, {
-        title: "Mobile App Development",
-        url: "/app/post/11",
-        createdAt: new Date("2024-03-16"),
-        updatedAt: new Date("2024-03-16"),
-    }, {
-        title: "UI/UX Design Principles",
-        url: "/app/post/12",
-        createdAt: new Date("2024-03-23"),
-        updatedAt: new Date("2024-03-23"),
-    }, {
-        title: "DevOps Methodology",
-        url: "/app/post/13",
-        createdAt: new Date("2024-03-30"),
-        updatedAt: new Date("2024-03-30"),
-    }, {
-        title: "Internet of Things Applications",
-        url: "/app/post/14",
-        createdAt: new Date("2024-04-05"),
-        updatedAt: new Date("2024-04-05"),
-    }, {
-        title: "Quantum Computing Basics",
-        url: "/app/post/15",
-        createdAt: new Date("2024-04-12"),
-        updatedAt: new Date("2024-04-12"),
-    }
-];
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const pathname  = usePathname()
+    const router = useRouter()
+    const { data: conversations, isLoading: conversationsLoading, refetch, isSuccess } = useConversationsQuery()
     const [isMouseHovered, setIsMouseHovered] = React.useState({
         url: "",
         isHoverd: false
     })
+
     const { open } = useSidebar()
     return (
         <Sidebar {...props} collapsible="icon">
@@ -127,12 +57,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarContent className="p-2 flex flex-col">
                 {/* We create a SidebarGroup for each parent. */}
                 <SidebarMenu className="flex-1">
-                    <Button>
+                    <Link href="/app" className="w-full" >
+                    <Button className="w-full cursor-pointer">
                         <PlusIcon />
-                        {open ? <Link href="/app">
+                        {open ? <div>
                             New Chat
-                        </Link> : null}
+                        </div> : null}
                     </Button>
+                    </Link>
                     {
                         items.map((item) => (
                             <SidebarMenuItem key={item.url}>
@@ -147,12 +79,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         open ? <SidebarGroup>
                             <SidebarGroupLabel>History</SidebarGroupLabel>
                             {
-                                history.map((item) => (
-                                    <SidebarMenuItem key={item.url}>
+                                isSuccess && !conversationsLoading && conversations.data.length > 0 ? conversations.data.map((item: Conversation) => (
+                                    <SidebarMenuItem key={item.id}>
                                         <SidebarMenuButton
-                                            className="line-clamp-1"
+                                            onClick={() => {
+                                                router.push(`/app/editor/${item.id}`)
+                                            }}
+                                            className={`line-clamp-1 cursor-pointer ${`/app/editor/${item.id}` === pathname ? "bg-muted" : ""}`}
                                             onMouseEnter={() => setIsMouseHovered({
-                                                url: item.url,
+                                                url: `/app/editor/${item.id}`,
                                                 isHoverd: true
                                             })}
                                             onMouseLeave={() => setIsMouseHovered(
@@ -162,20 +97,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                                 }
                                             )}
                                         >
-                                            <div className={`${isMouseHovered.isHoverd && isMouseHovered.url === item.url && open && item.title.length > 20 ? "scrolling-text" : ""}`}>
+                                            <div className={`${isMouseHovered.isHoverd && isMouseHovered.url === `/app/editor/${item.id}` && open && item.title.length > 20 ? "scrolling-text" : ""}`}>
                                                 {item.title}
                                             </div>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 ))
+                                    : <div className="w-full flex items-center mt-5 justify-center">No conversations</div>
                             }
-                        </SidebarGroup>: null
+                            {
+                                conversationsLoading &&
+                                <div className="w-full flex items-center mt-5 justify-center">
+                                    <Spinner className="size-8" />
+                                </div>
+                            }
+                        </SidebarGroup> : null
                     }
                 </SidebarMenu>
                 <NavUser user={{
-                    avatar:"",
+                    avatar: "",
                     email: "patrajyotishankar@gmail.com",
-                    name:"Jyotishankar Patra"
+                    name: "Jyotishankar Patra"
                 }} />
             </SidebarContent>
             <SidebarRail />

@@ -7,7 +7,7 @@ export const sampleMessages = [
     {
         id: "2",
         role: "assistant",
-        content: "Of course! I'd be happy to help you create a compelling LinkedIn post about remote work and team collaboration.\n\nTo tailor this perfectly for you:\n\n📝 **Length**: Professional (2-3 paragraphs)\n🎯 **Tone**: Insightful & forward-looking\n🏷️ **Hashtags**: #RemoteWork #FutureOfWork #TeamCollaboration #DigitalTransformation #WorkFromHome\n\nWould you like me to proceed with these settings, or would you prefer a different approach?",
+    content: "Of course! I'd be happy to help you create a compelling LinkedIn post about remote work and team collaboration.\n\nTo tailor this perfectly for you:\n\n📝 **Length**: Professional (2-3 paragraphs)\n🎯 **Tone**: Insightful & forward-looking\n🏷️ **Hashtags**: #RemoteWork #FutureOfWork #TeamCollaboration #DigitalTransformation #WorkFromHome\n\nWould you like me to proceed with these settings, or would you prefer a different approach?",
         metadata: {
             length: "professional",
             tone: "insightful",
