@@ -1,6 +1,6 @@
 import type { NextFunction, Response } from "express";
 import type { AuthRequest } from "../types";
-import { createConversationSchema } from "../validator";
+import { createConversationSchema, newMessageSchema } from "../validator";
 import createHttpError from "http-errors";
 import type { ChatService } from "../services/chat.service";
 
@@ -49,5 +49,34 @@ export class ChatController {
         }
         const messages = await this.chatService.getMessages(conversationId)
         return res.json({ success: true, message: "Messages fetched successfully", data: messages })
+    }
+
+    async newMessage (req: AuthRequest, res: Response, next: NextFunction) {
+        const { conversationId } = req.params
+        if (!conversationId) {
+            next(createHttpError(400, "Conversation not found"))
+            return;
+        }
+
+        const body = newMessageSchema.safeParse(req.body);
+        
+        if (!body.success) {
+            console.log(body.error)
+            next(createHttpError(400, JSON.parse(body.error.message)[0].message))
+            return;
+        }
+        const chat = await this.chatService.getConversation(conversationId)
+
+        if (!chat) {
+            next(createHttpError(400, "Conversation not found"))
+            return;
+        }
+        if(chat.user.id !== req.auth.userId) {
+            next(createHttpError(400, "You are not authorized to chat with other user's conversation"))
+            return;
+        }
+
+        const message = await this.chatService.newMessage(req.body)
+        return res.json({ success: true, message: "Message sent successfully", data: message })
     }
 }

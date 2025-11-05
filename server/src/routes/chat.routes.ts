@@ -21,5 +21,8 @@ router.get("/",authenticate, (req, res, next) => {
 router.get("/:conversationId",authenticate, (req, res, next) => {
     return chatController.getMessages(req as AuthRequest, res, next);
 }); 
+router.put("/:conversationId",authenticate, (req, res, next) => {
+    return chatController.getConversations(req as AuthRequest, res, next);
+});
 
 export default router;

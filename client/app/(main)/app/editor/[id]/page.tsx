@@ -37,7 +37,7 @@ const Page = () => {
             <div>
               <h1 className='text-2xl font-bold'>Preview</h1>
             </div>
-            <SocialPost variant={isSuccess && conversation.platform} author={{ name: user?.name!, avatar: user?.avatar! }} timestamp={"2 hours ago"} content={"This is a sample post"} engagement={{ reactions: 1200, comments: 10, reposts: 10, views: 10 }} />
+            <SocialPost variant={isSuccess && conversation.platform} author={{ name: user?.name!, avatar: user?.avatar! }} timestamp={"2 hours ago"} content={""} engagement={{ reactions: 1200, comments: 10, reposts: 10, views: 10 }} />
 
           </div>
         </ResizablePanel>

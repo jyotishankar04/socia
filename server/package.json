@@ -26,6 +26,10 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.78",
+    "@langchain/groq": "^0.2.4",
+    "@langchain/langgraph": "^0.4.9",
+    "@langchain/tavily": "^0.1.5",
     "@prisma/client": "^6.16.3",
     "@types/nodemailer": "^7.0.2",
     "bcryptjs": "^3.0.2",

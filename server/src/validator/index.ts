@@ -58,3 +58,7 @@ export const createConversationSchema = z.object({
         platform: data.platform.toUpperCase()
     }
 })
+
+export const newMessageSchema =z.object({
+    content: z.string({message: "Content is required"}).min(1)
+})

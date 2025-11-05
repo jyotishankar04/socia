@@ -11,13 +11,14 @@ export const useSignInMutation = () => useMutation({
     mutationKey: ["signin"],
     onSuccess: (data) => {
         console.log(data);
-    },
+    }
 });
 
 export const useSelfQuery = () => useQuery({
     queryKey: ["self"],
     queryFn: self,
-    enabled: false
+    enabled: false,
+    refetchOnWindowFocus: false
 });
 
 
