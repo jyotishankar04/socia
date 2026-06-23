@@ -1,14 +1,16 @@
 "use client"
 
 import { useIsMobile } from '@/hooks/use-mobile'
+import { useStreamMessage } from '@/hooks/use-stream-message'
 import React from 'react'
-import ChatInput, { defaultAttachmentOptions } from '../app/chat-input'
+import ChatInput from '../app/chat-input'
 import ChatMessages from './chat-messages'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { AiSuggestions } from './ai-suggestions'
 import type { Message } from '@/types'
 import { useForm } from 'react-hook-form'
-import { DownloadCloud, FilesIcon, ImagesIcon, Linkedin, Twitter } from 'lucide-react'
-import { IconBrandThreads } from '@tabler/icons-react'
+import { MonitorSmartphone, ArrowLeft } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 interface ChatFormValues {
     message: string
@@ -16,82 +18,105 @@ interface ChatFormValues {
 }
 
 interface Props {
+    conversationId: string
     messages: Message[] | undefined
-    onSendMessage: (message: string, platform: string) => Promise<void> | void
-    isSending?: boolean
+    onComplete: () => void
+    onPreviewDraft?: (content: string) => void
+    onAcceptDraft?: (draftId: string) => void
+    scrollToMessageId?: string | null
+    selectedDraftId?: string | null
+    platform?: string
 }
 
-const ChatUi: React.FC<Props> = ({ messages, onSendMessage, isSending = false }) => {
+const ChatUi: React.FC<Props> = ({
+    conversationId,
+    messages,
+    onComplete,
+    onPreviewDraft,
+    onAcceptDraft,
+    scrollToMessageId,
+    selectedDraftId,
+    platform,
+}) => {
+    const acceptedDraftId = messages?.find(m => m.role === "ASSISTANT" && m.post?.isAccepted)?.post?.id
+    const activeDraftId = selectedDraftId ?? acceptedDraftId
     const isMobile = useIsMobile()
+    const { sendMessage, isStreaming, currentStep, currentSources, liveSearches } = useStreamMessage(conversationId)
 
-    const { handleSubmit, reset, setValue, watch } = useForm<ChatFormValues>({
-        defaultValues: {
-            message: '',
-            platform: 'linkedin'
-        }
+    const { reset, setValue, watch } = useForm<ChatFormValues>({
+        defaultValues: { message: '', platform: 'linkedin' }
     })
 
-    const handleSend = async (data: ChatFormValues) => {
-        if (!data.message.trim()) return
-
-        await onSendMessage(data.message, data.platform)
-        reset() // Clear the input after sending
+    const handleInputSend = (message: string) => {
+        if (message.trim() && !isStreaming) {
+            sendMessage(message, onComplete)
+            reset()
+        }
     }
 
-    const handleInputSend = (message: string, platform?: string) => {
-        const currentPlatform = platform || watch('platform')
-        handleSubmit(() => onSendMessage(message, currentPlatform))()
-        reset()
-    }
-
-    const handleValueChange = (value: string) => {
-        setValue('message', value)
+    const handleSuggestionClick = (suggestion: string) => {
+        setValue('message', suggestion)
     }
 
     if (isMobile) {
         return (
-            <div className='w-full h-full bg-muted flex items-center justify-center'>
-                <div className='text-center p-4'>
-                    <h3 className='text-lg font-semibold text-muted-foreground mb-2'>
-                        Mobile View
-                    </h3>
-                    <p className='text-sm text-muted-foreground'>
-                        Chat interface is optimized for desktop. Please use a larger screen for the best experience.
-                    </p>
+            <div className="w-full h-full bg-background flex items-center justify-center p-6">
+                <div className="text-center space-y-5 max-w-xs">
+                    <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto ring-1 ring-primary/20">
+                        <MonitorSmartphone className="w-8 h-8 text-primary" />
+                    </div>
+                    <div>
+                        <h3 className="text-base font-semibold text-foreground">Desktop Recommended</h3>
+                        <p className="text-sm text-muted-foreground mt-1.5">
+                            The editor is optimized for larger screens. For the best experience, open on a desktop or tablet.
+                        </p>
+                    </div>
+                    <Link href="/app/chat">
+                        <Button variant="outline" size="sm" className="gap-1.5">
+                            <ArrowLeft className="w-4 h-4" />
+                            Back to chat
+                        </Button>
+                    </Link>
                 </div>
             </div>
         )
     }
 
     return (
-        <div className='w-full h-full bg-background p-4'>
-            <div className='h-full flex flex-col gap-4 max-w-4xl mx-auto'>
-                {/* Messages Area */}
-                <ScrollArea className='flex-1'>
-                        {messages && messages.length > 0 ? (
-                            <ChatMessages messages={messages} />
-                        ) : (
-                            <div className='flex items-center justify-center h-32 text-muted-foreground'>
-                                <p>No messages yet. Start a conversation!</p>
-                            </div>
-                        )}
-                </ScrollArea>
+        <div className="w-full h-full bg-background flex flex-col">
+            <div className="flex-1 min-h-0 overflow-hidden">
+                <ChatMessages
+                    messages={messages ?? []}
+                    isLoading={isStreaming}
+                    currentStep={currentStep}
+                    currentSources={currentSources}
+                    liveSearches={liveSearches}
+                    onSuggestionClick={handleSuggestionClick}
+                    onPreviewDraft={onPreviewDraft}
+                    onAcceptDraft={onAcceptDraft}
+                    scrollToMessageId={scrollToMessageId}
+                    selectedDraftId={selectedDraftId}
+                />
+            </div>
 
-                {/* Input Area */}
-                <div className='flex-shrink-0 '>
-                    <ChatInput
-                        value={watch('message')}
-                        onValueChange={handleValueChange}
-                        onSend={handleInputSend}
-                        isLoading={isSending}
-                        disabled={isSending}
-                        showUpgradeBanner={true}
-                        showPlatforms={false}
-                        variant="minimal"
-                        attachmentOptions={defaultAttachmentOptions}
-                        defaultPlatform='linkedin'
-                    />
-                </div>
+            {activeDraftId && (
+                <AiSuggestions chatId={conversationId} draftId={activeDraftId} platform={platform} />
+            )}
+
+            <div className="flex-shrink-0 p-3 border-t border-border bg-background/95 backdrop-blur-sm">
+                <ChatInput
+                    value={watch('message')}
+                    onValueChange={(val) => setValue('message', val)}
+                    onSend={handleInputSend}
+                    isLoading={isStreaming}
+                    disabled={isStreaming}
+                    showUpgradeBanner={false}
+                    showPlatforms={false}
+                    showAttachments={false}
+                    variant="minimal"
+                    defaultPlatform="linkedin"
+                    placeholder="Refine the post, change the tone, or ask a question…"
+                />
             </div>
         </div>
     )

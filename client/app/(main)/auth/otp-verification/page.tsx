@@ -3,12 +3,15 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp"
 import { Spinner } from "@/components/ui/spinner"
+import { getApiErrorMessage } from "@/lib/errors"
 import { useOtpVerification, useSelfQuery } from "@/lib/query"
 import { useAuthStore } from "@/store/auth"
 import Link from "next/link"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState, useCallback } from "react"
 import { useForm } from "react-hook-form"
+import { Mail } from "lucide-react"
+import { toast } from "sonner"
 
 interface OTPForm {
     otp: string
@@ -21,96 +24,90 @@ const OTPVerification = () => {
         setValue,
         watch,
         formState: { errors }
-    } = useForm<OTPForm>();
+    } = useForm<OTPForm>()
     const [otpValue, setOtpValue] = useState("")
+    const [cooldown, setCooldown] = useState(0)
     const searchParams = useSearchParams()
     const userId = searchParams.get("userId")
     const purposeRef = searchParams.get("purpose")
-    const router = useRouter();
+    const router = useRouter()
     const { setUser } = useAuthStore()
 
-    const { mutateAsync: verifyOtp, isPending: isVerifying, isSuccess: isVerifySuccess, data: verifyData } = useOtpVerification();
-    const { data: user, refetch, isRefetching, isSuccess: isSelfSuccess } = useSelfQuery();
+    const { mutateAsync: verifyOtp, isPending: isVerifying, isSuccess: isVerifySuccess, data: verifyData } = useOtpVerification()
+    const { data: user, refetch, isSuccess: isSelfSuccess } = useSelfQuery()
 
-    // Watch for OTP value changes
-    const watchedOtp = watch("otp");
+    const watchedOtp = watch("otp")
 
-    // Set up OTP field registration
     useEffect(() => {
         register("otp", {
             required: "Verification code is required",
-            minLength: {
-                value: 6,
-                message: "Verification code must be 6 digits"
-            },
-            maxLength: {
-                value: 6,
-                message: "Verification code must be 6 digits"
-            },
-            pattern: {
-                value: /^[0-9]{6}$/,
-                message: "Verification code must contain only numbers"
-            }
-        });
-    }, [register]);
+            minLength: { value: 6, message: "Verification code must be 6 digits" },
+            maxLength: { value: 6, message: "Verification code must be 6 digits" },
+            pattern: { value: /^[0-9]{6}$/, message: "Verification code must contain only numbers" }
+        })
+    }, [register])
 
-    // Handle OTP value changes
     const handleOtpChange = (value: string) => {
-        setOtpValue(value);
-        setValue("otp", value, { shouldValidate: true });
-    };
+        setOtpValue(value)
+        setValue("otp", value, { shouldValidate: true })
+    }
 
-    // Handle successful verification
     useEffect(() => {
         if (isVerifySuccess && verifyData) {
             refetch()
         }
-    }, [isVerifySuccess, verifyData, setUser, router])
+    }, [isVerifySuccess, verifyData, refetch])
 
     useEffect(() => {
         if (isSelfSuccess && user) {
             setUser(user.data)
-            if(purposeRef === "register") {
+            if (purposeRef === "register") {
                 router.push("/auth/onboard")
-            }else{
+            } else {
                 router.push("/app")
             }
         }
-    }, [isSelfSuccess, user, setUser, router])
-
+    }, [isSelfSuccess, user, setUser, router, purposeRef])
 
     const onSubmit = async (data: OTPForm) => {
-        if (!userId) {
-            console.error("User ID is missing");
-            return;
+        if (!userId) return
+        try {
+            await verifyOtp({ userId: userId as string, otp: data.otp })
+        } catch (error) {
+            toast.error(getApiErrorMessage(error, "Could not verify OTP"))
         }
-
-        await verifyOtp({
-            userId: userId as string,
-            otp: data.otp
-        });
     }
 
-    const handleResendOtp = async () => {
-        if (!userId) {
-            console.error("User ID is missing");
-            return;
-        }
-
-    }
+    const handleResendOtp = useCallback(() => {
+        if (!userId) return
+        setCooldown(30)
+        const interval = setInterval(() => {
+            setCooldown((prev) => {
+                if (prev <= 1) {
+                    clearInterval(interval)
+                    return 0
+                }
+                return prev - 1
+            })
+        }, 1000)
+    }, [userId])
 
     return (
-        <div className="max-w-md p-4 pt-0 w-full flex flex-col items-center">
+        <div className="w-full">
             <div className="text-center mb-6">
-                <p className="text-sm text-muted-foreground">
-                    We've sent a 6-digit verification code to your email address.
+                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <Mail className="w-6 h-6 text-primary" />
+                </div>
+                <h2 className="text-lg font-semibold text-foreground">Check your email</h2>
+                <p className="text-sm text-muted-foreground mt-1.5">
+                    We&apos;ve sent a 6-digit verification code to your email address.
                 </p>
             </div>
 
-            <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-                <FieldGroup className="w-full space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <FieldGroup className="w-full space-y-5">
                     <Field>
-                        <FieldLabel htmlFor="otp">Verification Code</FieldLabel>
+                        <FieldLabel htmlFor="otp" className="text-center block">Verification Code</FieldLabel>
                         <div className="flex justify-center w-full">
                             <InputOTP
                                 maxLength={6}
@@ -134,7 +131,7 @@ const OTPVerification = () => {
                             </InputOTP>
                         </div>
                         {errors.otp && (
-                            <p className="text-sm text-red-500 mt-2 text-center">{errors.otp.message}</p>
+                            <p className="text-sm text-destructive mt-2 text-center">{errors.otp.message}</p>
                         )}
                     </Field>
 
@@ -143,27 +140,30 @@ const OTPVerification = () => {
                         className="w-full"
                         disabled={isVerifying || watchedOtp?.length !== 6}
                     >
-                        {isVerifying && <Spinner />}
-                        {isVerifying ? "Verifying..." : "Verify"}
+                        {isVerifying && <Spinner className="mr-2 h-4 w-4" />}
+                        {isVerifying ? "Verifying…" : "Verify"}
                     </Button>
                 </FieldGroup>
             </form>
 
-            {/* Additional helpful links */}
-            <div className="mt-6 text-center">
+            <div className="mt-5 text-center space-y-2">
                 <p className="text-xs text-muted-foreground">
-                    Didn't receive the code?{" "}
-                    <button
-                        type="button"
-                        className="underline text-foreground hover:tex-foreground/80 disabled:opacity-50"
-                        onClick={handleResendOtp}
-                    >
-                        Resend
-                    </button>
+                    Didn&apos;t receive the code?{" "}
+                    {cooldown > 0 ? (
+                        <span className="text-muted-foreground">Resend in {cooldown}s</span>
+                    ) : (
+                        <button
+                            type="button"
+                            className="underline text-foreground hover:text-primary transition-colors"
+                            onClick={handleResendOtp}
+                        >
+                            Resend
+                        </button>
+                    )}
                 </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                    Return to {" "}
-                    <Link href="/auth/signin" className="underline text-foreground">
+                <p className="text-xs text-muted-foreground">
+                    Return to{" "}
+                    <Link href="/auth/signin" className="underline text-foreground hover:text-primary transition-colors">
                         Sign in
                     </Link>
                 </p>

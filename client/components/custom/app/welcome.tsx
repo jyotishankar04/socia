@@ -1,72 +1,63 @@
 import React, { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from "motion/react"
-import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { Badge } from '@/components/ui/badge'
+import { Sparkles } from 'lucide-react'
+
+const socialMedias = ["LinkedIn", "Twitter/X", "Threads"]
 
 const WelcomeSection = () => {
-    const [currentSocialMedia, setCurrentSocialMedia] = useState(0);
-
-    const socialMedias = ["LinkedIn", "Twitter/X", "Threads", "Instagram", "Facebook"];
+    const [currentIndex, setCurrentIndex] = useState(0)
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentSocialMedia((prev) => (prev + 1) % socialMedias.length);
-        }, 2000);
+            setCurrentIndex((prev) => (prev + 1) % socialMedias.length)
+        }, 2000)
+        return () => clearInterval(interval)
+    }, [])
 
-        return () => clearInterval(interval);
-    }, []);
     return (
-        <div className="text-center space-y-6">
-            {/* Main Welcome Text */}
+        <div className="text-center space-y-5">
             <motion.div
-                className="flex flex-col items-center justify-center"
-                initial={{ opacity: 0, y: 10 }}
+                className="flex flex-col items-center justify-center gap-3"
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                    Welcome to <span className='text-primary'>Qwikish</span> Socia
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+                    What would you like to post today?
                 </h1>
+                <p className="text-muted-foreground text-sm md:text-base flex items-center gap-1.5 flex-wrap justify-center">
+                    Generate a{" "}
+                    <span className="inline-flex items-center">
+                        <AnimatePresence mode="wait">
+                            <motion.span
+                                key={socialMedias[currentIndex]}
+                                className="text-primary font-semibold"
+                                initial={{ opacity: 0, y: 6 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -6 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                {socialMedias[currentIndex]}
+                            </motion.span>
+                        </AnimatePresence>
+                    </span>{" "}
+                    post instantly with AI
+                </p>
             </motion.div>
 
-            {/* Animated Subtitle */}
             <motion.div
-                className="flex flex-col items-center justify-center"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
             >
-                <div className="flex flex-col items-center gap-3">
-                    <p className="text-md md:text-md text-muted-foreground flex items-center flex-wrap justify-center">
-                        Generate{" "}
-                        <span className="mx-2 text-foreground">
-                            <AnimatePresence mode="wait">
-                                <motion.span
-                                    key={socialMedias[currentSocialMedia]}
-                                    className="text-primary"
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -8 }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    {socialMedias[currentSocialMedia]}
-                                </motion.span>
-                            </AnimatePresence>
-                        </span>{" "}
-                        posts instantly
-                    </p>
-                    {/* Beautiful status indicator */}
-                    <div className="flex items-center gap-3 mt-2 border border-muted-foreground/20 p-2 rounded-xl pr-4 bg-muted/30 backdrop-blur-sm">
-                        <div className="flex items-center gap-2">
-
-                            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
-                                AI Powered
-                            </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">Instant content generation</p>
-                        <ArrowRight className="w-4 h-4 text-muted-foreground/60 ml-1" />
-                    </div>
-                </div>
+                <Badge
+                    variant="secondary"
+                    className="bg-primary/10 text-primary border-primary/20 px-3 py-1 gap-1.5"
+                >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Platform-optimized · Instant results · No editing required
+                </Badge>
             </motion.div>
         </div>
     )

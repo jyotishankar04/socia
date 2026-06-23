@@ -6,32 +6,26 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { PageHeader } from "@/components/custom/shared/page-header"
 import { useState } from "react"
+import { toast } from "sonner"
+import { Bell, Palette, Settings2, Shield, Globe } from "lucide-react"
+import { motion } from "motion/react"
 
 export default function SettingsPage() {
     const [settings, setSettings] = useState({
-        // Appearance
         theme: "system",
-
-        // Notifications
         emailNotifications: true,
         pushNotifications: true,
         marketingEmails: false,
-
-        // General
         language: "english",
-        defaultPlatform: "twitter",
+        defaultPlatform: "linkedin",
         autoSaveDrafts: true,
-
-        // Privacy & Safety
         contentModeration: true
     })
 
-    const handleSave = () => {
-        console.log("Saving settings:", settings)
-        // In a real app, this would make an API call
-        alert("Settings saved successfully!")
-    }
+    const handleSave = () => toast.success("Settings saved successfully.")
 
     const handleReset = () => {
         setSettings({
@@ -40,186 +34,196 @@ export default function SettingsPage() {
             pushNotifications: true,
             marketingEmails: false,
             language: "english",
-            defaultPlatform: "twitter",
+            defaultPlatform: "linkedin",
             autoSaveDrafts: true,
             contentModeration: true
         })
-        alert("Settings reset to defaults!")
+        toast.success("Settings reset to defaults.")
     }
 
-    const updateSetting = (key: string, value: any) => {
-        setSettings(prev => ({
-            ...prev,
-            [key]: value
-        }))
-    }
+    const update = (key: string, value: boolean | string) => setSettings(prev => ({ ...prev, [key]: value }))
+
+    const tabs = [
+        { value: "appearance", label: "Appearance", icon: Palette },
+        { value: "notifications", label: "Notifications", icon: Bell },
+        { value: "general", label: "General", icon: Settings2 },
+        { value: "privacy", label: "Privacy", icon: Shield },
+    ]
 
     return (
-        <div className="min-h-screen bg-background p-6">
-            <div className="max-w-4xl mx-auto space-y-6">
-                {/* Header */}
-                <div>
-                    <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-                    <p className="text-muted-foreground">Manage your application preferences</p>
-                </div>
+        <div className="p-6 space-y-6 max-w-3xl w-full mx-auto">
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                <PageHeader
+                    title="Settings"
+                    description="Manage your application preferences"
+                />
+            </motion.div>
 
-                {/* Appearance Section */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Appearance</CardTitle>
-                        <CardDescription>Customize how the app looks and feels</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-3">
-                            <Label htmlFor="theme">Theme</Label>
-                            <Select value={settings.theme} onValueChange={(value) => updateSetting("theme", value)}>
-                                <SelectTrigger id="theme" className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="Select theme" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="light">Light</SelectItem>
-                                    <SelectItem value="dark">Dark</SelectItem>
-                                    <SelectItem value="system">System</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </CardContent>
-                </Card>
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.05 }}
+            >
+                <Tabs defaultValue="appearance" className="w-full">
+                    <TabsList className="w-full justify-start gap-0 bg-transparent p-0 h-auto border-b border-border rounded-none mb-6">
+                        {tabs.map((tab) => (
+                            <TabsTrigger
+                                key={tab.value}
+                                value={tab.value}
+                                className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 py-2.5 text-sm font-medium text-muted-foreground data-[state=active]:text-foreground transition-colors gap-2"
+                            >
+                                <tab.icon className="w-4 h-4" />
+                                {tab.label}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
 
-                <Separator />
+                    <TabsContent value="appearance" className="space-y-4 mt-0">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Appearance</CardTitle>
+                                <CardDescription>Customize how the app looks and feels</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="max-w-xs space-y-2">
+                                    <Label htmlFor="theme">Theme</Label>
+                                    <Select value={settings.theme} onValueChange={(val) => update("theme", val)}>
+                                        <SelectTrigger id="theme">
+                                            <SelectValue placeholder="Select theme" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="light">Light</SelectItem>
+                                            <SelectItem value="dark">Dark</SelectItem>
+                                            <SelectItem value="system">System</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
 
-                {/* Notifications Section */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Notifications</CardTitle>
-                        <CardDescription>Manage how you receive notifications</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <div className="space-y-0.5">
-                                <Label htmlFor="email-notifications">Email Notifications</Label>
-                                <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                            </div>
-                            <Switch
-                                id="email-notifications"
-                                checked={settings.emailNotifications}
-                                onCheckedChange={(checked) => updateSetting("emailNotifications", checked)}
-                            />
-                        </div>
+                    <TabsContent value="notifications" className="space-y-4 mt-0">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Notifications</CardTitle>
+                                <CardDescription>Manage how you receive notifications</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {[
+                                    { key: "emailNotifications", label: "Email Notifications", description: "Receive notifications via email" },
+                                    { key: "pushNotifications", label: "Push Notifications", description: "Receive push notifications in your browser" },
+                                    { key: "marketingEmails", label: "Marketing Emails", description: "Receive tips, updates, and offers" },
+                                ].map(({ key, label, description }) => (
+                                    <div key={key} className="flex items-center justify-between gap-4">
+                                        <div className="space-y-0.5">
+                                            <Label htmlFor={key}>{label}</Label>
+                                            <p className="text-sm text-muted-foreground">{description}</p>
+                                        </div>
+                                        <Switch
+                                            id={key}
+                                            checked={settings[key as keyof typeof settings] as boolean}
+                                            onCheckedChange={(checked) => update(key, checked)}
+                                        />
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
 
-                        <div className="flex items-center justify-between">
-                            <div className="space-y-0.5">
-                                <Label htmlFor="push-notifications">Push Notifications</Label>
-                                <p className="text-sm text-muted-foreground">Receive push notifications in your browser</p>
-                            </div>
-                            <Switch
-                                id="push-notifications"
-                                checked={settings.pushNotifications}
-                                onCheckedChange={(checked) => updateSetting("pushNotifications", checked)}
-                            />
-                        </div>
+                    <TabsContent value="general" className="space-y-4 mt-0">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">General</CardTitle>
+                                <CardDescription>General application settings</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                <div className="max-w-xs space-y-2">
+                                    <Label htmlFor="language">Language</Label>
+                                    <Select value={settings.language} onValueChange={(val) => update("language", val)}>
+                                        <SelectTrigger id="language">
+                                            <SelectValue placeholder="Select language" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="english">English</SelectItem>
+                                            <SelectItem value="spanish">Spanish</SelectItem>
+                                            <SelectItem value="french">French</SelectItem>
+                                            <SelectItem value="german">German</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
 
-                        <div className="flex items-center justify-between">
-                            <div className="space-y-0.5">
-                                <Label htmlFor="marketing-emails">Marketing Emails</Label>
-                                <p className="text-sm text-muted-foreground">Receive tips, updates, and offers</p>
-                            </div>
-                            <Switch
-                                id="marketing-emails"
-                                checked={settings.marketingEmails}
-                                onCheckedChange={(checked) => updateSetting("marketingEmails", checked)}
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
+                                <div className="max-w-xs space-y-2">
+                                    <Label htmlFor="defaultPlatform">Default Platform</Label>
+                                    <Select value={settings.defaultPlatform} onValueChange={(val) => update("defaultPlatform", val)}>
+                                        <SelectTrigger id="defaultPlatform">
+                                            <SelectValue placeholder="Select platform" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="linkedin">LinkedIn</SelectItem>
+                                            <SelectItem value="twitter">Twitter/X</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-sm text-muted-foreground">The platform selected by default when starting a new post</p>
+                                </div>
 
-                <Separator />
+                                <Separator />
 
-                {/* General Section */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>General</CardTitle>
-                        <CardDescription>General application settings</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div className="space-y-3">
-                            <Label htmlFor="language">Language</Label>
-                            <Select value={settings.language} onValueChange={(value) => updateSetting("language", value)}>
-                                <SelectTrigger id="language" className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="Select language" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="english">English</SelectItem>
-                                    <SelectItem value="spanish">Spanish</SelectItem>
-                                    <SelectItem value="french">French</SelectItem>
-                                    <SelectItem value="german">German</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="space-y-0.5">
+                                        <Label htmlFor="autoSave">Auto-save Drafts</Label>
+                                        <p className="text-sm text-muted-foreground">Automatically save your work as you type</p>
+                                    </div>
+                                    <Switch
+                                        id="autoSave"
+                                        checked={settings.autoSaveDrafts}
+                                        onCheckedChange={(checked) => update("autoSaveDrafts", checked)}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
 
-                        <div className="space-y-3">
-                            <Label htmlFor="default-platform">Default Platform</Label>
-                            <Select value={settings.defaultPlatform} onValueChange={(value) => updateSetting("defaultPlatform", value)}>
-                                <SelectTrigger id="default-platform" className="w-full md:w-[200px]">
-                                    <SelectValue placeholder="Select platform" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="twitter">Twitter/X</SelectItem>
-                                    <SelectItem value="linkedin">LinkedIn</SelectItem>
-                                    <SelectItem value="facebook">Facebook</SelectItem>
-                                    <SelectItem value="instagram">Instagram</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <p className="text-sm text-muted-foreground">The platform that will be selected by default</p>
-                        </div>
+                    <TabsContent value="privacy" className="space-y-4 mt-0">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-base">Privacy & Safety</CardTitle>
+                                <CardDescription>Control your privacy settings</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="space-y-0.5">
+                                        <Label htmlFor="contentModeration">Content Moderation</Label>
+                                        <p className="text-sm text-muted-foreground">Filter potentially inappropriate content in AI outputs</p>
+                                    </div>
+                                    <Switch
+                                        id="contentModeration"
+                                        checked={settings.contentModeration}
+                                        onCheckedChange={(checked) => update("contentModeration", checked)}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+                </Tabs>
+            </motion.div>
 
-                        <div className="flex items-center justify-between">
-                            <div className="space-y-0.5">
-                                <Label htmlFor="auto-save">Auto-save Drafts</Label>
-                                <p className="text-sm text-muted-foreground">Automatically save your work as you type</p>
-                            </div>
-                            <Switch
-                                id="auto-save"
-                                checked={settings.autoSaveDrafts}
-                                onCheckedChange={(checked) => updateSetting("autoSaveDrafts", checked)}
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <Separator />
-
-                {/* Privacy & Safety Section */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Privacy & Safety</CardTitle>
-                        <CardDescription>Control your privacy settings</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <div className="space-y-0.5">
-                                <Label htmlFor="content-moderation">Content Moderation</Label>
-                                <p className="text-sm text-muted-foreground">Filter potentially inappropriate content</p>
-                            </div>
-                            <Switch
-                                id="content-moderation"
-                                checked={settings.contentModeration}
-                                onCheckedChange={(checked) => updateSetting("contentModeration", checked)}
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Action Buttons */}
-                <div className="flex gap-4 justify-end pt-6">
-                    <Button variant="outline" onClick={handleReset}>
-                        Reset to Defaults
-                    </Button>
-                    <Button onClick={handleSave}>
-                        Save Changes
-                    </Button>
-                </div>
-            </div>
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="flex gap-3 justify-end"
+            >
+                <Button variant="outline" onClick={handleReset}>
+                    Reset to Defaults
+                </Button>
+                <Button onClick={handleSave}>
+                    Save Changes
+                </Button>
+            </motion.div>
         </div>
     )
 }

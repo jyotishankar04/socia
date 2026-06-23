@@ -1,7 +1,7 @@
 import { expressjwt } from "express-jwt";
 import logger from "../config/logger";
 import _env from "../config";
-import type {  IRefreshTokenPayload } from "../types";
+import type {  IRefreshTokenPayload } from "../shared/types";
 import prisma from "../config/prisma";
 
 export const validateRefreshToken = expressjwt({
@@ -24,9 +24,9 @@ export const validateRefreshToken = expressjwt({
                 if(!session) return true
 
                 if (session.expiresAt < new Date()) {
-                    return false;
+                    return true; // expired = revoked
                 }
-                return true;
+                return false; // valid = not revoked
             } catch (err) {
                 logger.error(
                     "Error validating refresh token: " +

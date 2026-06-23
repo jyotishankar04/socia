@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
+import { Progress } from "@/components/ui/progress"
+import { PageHeader } from "@/components/custom/shared/page-header"
 import {
     CreditCard,
     Download,
@@ -15,9 +16,11 @@ import {
     Zap,
     ArrowRight,
     Calendar,
-    Receipt
+    Shield,
 } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
+import { motion } from "motion/react"
 
 export default function BillingPage() {
     const [billingInfo, setBillingInfo] = useState({
@@ -40,7 +43,7 @@ export default function BillingPage() {
                 "Standard support"
             ],
             cta: "Current Plan",
-            current: true,
+            current: billingInfo.currentPlan === "free",
             popular: false
         },
         {
@@ -57,8 +60,8 @@ export default function BillingPage() {
                 "Priority support",
                 "Custom branding"
             ],
-            cta: "Current Plan",
-            current: true,
+            cta: billingInfo.currentPlan === "pro" ? "Current Plan" : "Upgrade",
+            current: billingInfo.currentPlan === "pro",
             popular: true
         },
         {
@@ -78,368 +81,296 @@ export default function BillingPage() {
                 "API access"
             ],
             cta: "Upgrade",
-            current: false,
+            current: billingInfo.currentPlan === "business",
             popular: false
         }
     ]
 
     const billingHistory = [
-        {
-            id: "inv_001",
-            date: "Jan 15, 2024",
-            amount: "$29.00",
-            status: "paid",
-            description: "Professional Plan - Monthly"
-        },
-        {
-            id: "inv_002",
-            date: "Dec 15, 2023",
-            amount: "$29.00",
-            status: "paid",
-            description: "Professional Plan - Monthly"
-        },
-        {
-            id: "inv_003",
-            date: "Nov 15, 2023",
-            amount: "$29.00",
-            status: "paid",
-            description: "Professional Plan - Monthly"
-        },
-        {
-            id: "inv_004",
-            date: "Oct 15, 2023",
-            amount: "$29.00",
-            status: "paid",
-            description: "Professional Plan - Monthly"
-        }
+        { id: "inv_001", date: "Jan 15, 2024", amount: "$29.00", status: "paid", description: "Professional Plan - Monthly" },
+        { id: "inv_002", date: "Dec 15, 2023", amount: "$29.00", status: "paid", description: "Professional Plan - Monthly" },
+        { id: "inv_003", date: "Nov 15, 2023", amount: "$29.00", status: "paid", description: "Professional Plan - Monthly" },
+        { id: "inv_004", date: "Oct 15, 2023", amount: "$29.00", status: "paid", description: "Professional Plan - Monthly" },
     ]
 
     const paymentMethods = [
-        {
-            id: "visa",
-            type: "Visa",
-            last4: "4242",
-            expiry: "12/25",
-            isDefault: true
-        },
-        {
-            id: "mastercard",
-            type: "Mastercard",
-            last4: "8888",
-            expiry: "09/24",
-            isDefault: false
-        }
+        { id: "visa", type: "Visa", last4: "4242", expiry: "12/25", isDefault: true },
+        { id: "mastercard", type: "Mastercard", last4: "8888", expiry: "09/24", isDefault: false }
     ]
 
     const handlePlanChange = (planId: string) => {
-        console.log("Changing plan to:", planId)
         setBillingInfo(prev => ({ ...prev, currentPlan: planId }))
-        alert(`Plan changed to ${planId}`)
+        toast.success(`Plan changed to ${planId}.`)
     }
 
     const handleDownloadInvoice = (invoiceId: string) => {
-        console.log("Downloading invoice:", invoiceId)
-        alert(`Downloading invoice ${invoiceId}`)
+        toast.info(`Downloading invoice ${invoiceId}…`)
     }
 
     const handleUpdatePaymentMethod = () => {
-        alert("Redirecting to payment method update...")
+        toast.info("Redirecting to payment method update…")
     }
 
     const handleCancelSubscription = () => {
-        if (confirm("Are you sure you want to cancel your subscription? You'll lose access to premium features at the end of your billing period.")) {
-            alert("Subscription cancelled successfully")
-        }
+        toast.error("Subscription cancelled. You'll retain access until the end of your billing period.", {
+            action: { label: "Undo", onClick: () => toast.success("Cancellation reversed.") }
+        })
     }
 
+    const usageItems = [
+        { label: "Social Accounts", value: 7, max: 10, percent: 70 },
+        { label: "AI Content Usage", value: 89, max: 100, percent: 89 },
+    ]
+
     return (
-        <div className="min-h-screen bg-background p-6">
-            <div className="max-w-6xl mx-auto space-y-6">
-                {/* Header */}
-                <div>
-                    <h1 className="text-3xl font-bold text-foreground">Billing</h1>
-                    <p className="text-muted-foreground">Manage your subscription and payment methods</p>
+        <div className="p-6 space-y-6 max-w-5xl w-full mx-auto">
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                <PageHeader
+                    title="Billing"
+                    description="Manage your subscription and payment methods"
+                />
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.05 }}
+            >
+                <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-background overflow-hidden relative">
+                    <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
+                    <CardContent className="p-6 relative z-10">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex items-start gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                                    <Crown className="w-5 h-5 text-primary" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-muted-foreground">Current Plan</p>
+                                    <p className="text-xl font-bold text-foreground">
+                                        Professional{" "}
+                                        <span className="text-base font-normal text-muted-foreground">· $29.00/month</span>
+                                    </p>
+                                    <p className="text-xs text-muted-foreground mt-0.5">Next billing: February 15, 2024</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Badge className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1">
+                                    <Shield className="w-3 h-3" />
+                                    Active
+                                </Badge>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.1 }}
+                className="space-y-6"
+            >
+                <div className="text-center">
+                    <h2 className="text-lg font-semibold text-foreground">Choose the right plan</h2>
+                    <p className="text-sm text-muted-foreground mt-1">Scale your social media management with our flexible plans</p>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left Column - Current Plan & Billing History */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Current Plan */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Crown className="h-5 w-5 text-yellow-500" />
-                                    Current Plan
-                                </CardTitle>
-                                <CardDescription>
-                                    You're currently on the <strong>Professional</strong> plan
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-2xl font-bold">$29.00 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
-                                        <p className="text-sm text-muted-foreground">Next billing date: February 15, 2024</p>
-                                    </div>
-                                    <Badge variant="default" className="bg-green-500">
-                                        Active
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {plans.map((plan) => (
+                        <Card
+                            key={plan.id}
+                            className={`relative ${plan.current ? "border-primary ring-1 ring-primary/20" : ""} ${plan.popular ? "border-primary/40" : ""}`}
+                        >
+                            {plan.popular && (
+                                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                                    <Badge className="gap-1 shadow-sm">
+                                        <Zap className="h-3 w-3" />
+                                        Most Popular
                                     </Badge>
                                 </div>
-
-                                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                                    <div>
-                                        <p className="font-medium">Auto-renewal</p>
-                                        <p className="text-sm text-muted-foreground">Your plan will automatically renew</p>
-                                    </div>
-                                    <Switch
-                                        checked={billingInfo.autoRenew}
-                                        onCheckedChange={(checked) => setBillingInfo(prev => ({ ...prev, autoRenew: checked }))}
-                                    />
+                            )}
+                            <CardHeader className={plan.popular ? "pt-7" : ""}>
+                                <CardTitle className="flex items-center justify-between text-base">
+                                    {plan.name}
+                                    {plan.current && <Badge variant="secondary">Current</Badge>}
+                                </CardTitle>
+                                <div className="text-3xl font-bold">
+                                    {plan.price}
+                                    {plan.period !== "forever" && (
+                                        <span className="text-sm font-normal text-muted-foreground"> /{plan.period.replace("per ", "")}</span>
+                                    )}
                                 </div>
-                            </CardContent>
-                            <CardFooter className="flex gap-3">
-                                <Button variant="outline" onClick={handleCancelSubscription}>
-                                    Cancel Subscription
-                                </Button>
-                                <Button onClick={handleUpdatePaymentMethod}>
-                                    Update Payment Method
-                                </Button>
-                            </CardFooter>
-                        </Card>
-
-                        {/* Billing History */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Billing History</CardTitle>
-                                <CardDescription>View and download your past invoices</CardDescription>
+                                <CardDescription>{plan.description}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="space-y-4">
-                                    {billingHistory.map((invoice) => (
-                                        <div key={invoice.id} className="flex items-center justify-between p-4 border rounded-lg">
-                                            <div className="flex items-center gap-4">
-                                                <FileText className="h-8 w-8 text-muted-foreground" />
-                                                <div>
-                                                    <p className="font-medium">{invoice.description}</p>
-                                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                        <Calendar className="h-3 w-3" />
-                                                        {invoice.date}
-                                                        <Badge variant="secondary" className="text-xs">
-                                                            {invoice.status}
-                                                        </Badge>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-4">
-                                                <p className="font-semibold">{invoice.amount}</p>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => handleDownloadInvoice(invoice.id)}
-                                                >
-                                                    <Download className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </div>
+                                <ul className="space-y-2">
+                                    {plan.features.map((feature, i) => (
+                                        <li key={i} className="flex items-center gap-2 text-sm">
+                                            <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+                                            {feature}
+                                        </li>
                                     ))}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </div>
-
-                    {/* Right Column - Payment Methods & Upgrade Options */}
-                    <div className="space-y-6">
-                        {/* Payment Methods */}
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <CreditCard className="h-5 w-5" />
-                                    Payment Methods
-                                </CardTitle>
-                                <CardDescription>Manage your payment methods</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                {paymentMethods.map((method) => (
-                                    <div
-                                        key={method.id}
-                                        className={`flex items-center justify-between p-3 border rounded-lg ${method.isDefault ? "border-primary" : ""
-                                            }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-6 bg-muted rounded flex items-center justify-center">
-                                                <CreditCard className="h-3 w-3" />
-                                            </div>
-                                            <div>
-                                                <p className="font-medium">{method.type} •••• {method.last4}</p>
-                                                <p className="text-xs text-muted-foreground">Expires {method.expiry}</p>
-                                            </div>
-                                        </div>
-                                        {method.isDefault && (
-                                            <Badge variant="secondary">Default</Badge>
-                                        )}
-                                    </div>
-                                ))}
-                                <Button variant="outline" className="w-full" onClick={handleUpdatePaymentMethod}>
-                                    Add Payment Method
-                                </Button>
-                            </CardContent>
-                        </Card>
-
-                        {/* Upgrade Card */}
-                        <Card className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 border-purple-200 dark:border-purple-800">
-                            <CardHeader>
-                                <CardTitle className="flex items-center gap-2">
-                                    <Sparkles className="h-5 w-5 text-purple-600" />
-                                    Ready to upgrade?
-                                </CardTitle>
-                                <CardDescription>
-                                    Get access to advanced features and higher limits
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="space-y-3">
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                        <span className="text-sm">Up to 25 social accounts</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                        <span className="text-sm">Team collaboration tools</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                        <span className="text-sm">Advanced ROI tracking</span>
-                                    </div>
-                                </div>
+                                </ul>
                             </CardContent>
                             <CardFooter>
-                                <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                                    Upgrade to Business
-                                    <ArrowRight className="h-4 w-4 ml-2" />
+                                <Button
+                                    className="w-full"
+                                    variant={plan.current ? "outline" : "default"}
+                                    onClick={() => !plan.current && handlePlanChange(plan.id)}
+                                    disabled={plan.current}
+                                >
+                                    {plan.cta}
                                 </Button>
                             </CardFooter>
                         </Card>
-                    </div>
+                    ))}
                 </div>
+            </motion.div>
 
-                {/* Plans Comparison */}
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.15 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+                {usageItems.map((item) => (
+                    <Card key={item.label}>
+                        <CardContent className="p-5 space-y-2.5">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">{item.label}</span>
+                                <span className="font-medium">{item.value}/{item.max}</span>
+                            </div>
+                            <Progress value={item.percent} className="h-2" />
+                        </CardContent>
+                    </Card>
+                ))}
                 <Card>
-                    <CardHeader className="text-center">
-                        <CardTitle>Choose the right plan for you</CardTitle>
-                        <CardDescription>
-                            Scale your social media management with our flexible plans
-                        </CardDescription>
+                    <CardContent className="p-5 space-y-2.5">
+                        <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Scheduled Posts</span>
+                            <span className="font-medium">245/∞</span>
+                        </div>
+                        <Progress value={45} className="h-2" />
+                    </CardContent>
+                </Card>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.2 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base">Payment Methods</CardTitle>
+                        <CardDescription>Manage your payment methods</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        {paymentMethods.map((method) => (
+                            <div
+                                key={method.id}
+                                className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+                                    method.isDefault ? "border-primary bg-primary/5" : "border-border"
+                                }`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-6 bg-muted rounded flex items-center justify-center">
+                                        <CreditCard className="h-3 w-3" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-medium">{method.type} •••• {method.last4}</p>
+                                        <p className="text-xs text-muted-foreground">Expires {method.expiry}</p>
+                                    </div>
+                                </div>
+                                {method.isDefault && (
+                                    <Badge variant="secondary" className="text-xs">Default</Badge>
+                                )}
+                            </div>
+                        ))}
+                        <Button variant="outline" className="w-full mt-2" onClick={handleUpdatePaymentMethod}>
+                            Add Payment Method
+                        </Button>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-base">Billing History</CardTitle>
+                        <CardDescription>View and download your past invoices</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {plans.map((plan) => (
-                                <Card
-                                    key={plan.id}
-                                    className={`relative ${plan.current ? "border-primary ring-2 ring-primary/20" : ""
-                                        } ${plan.popular ? "border-purple-200 dark:border-purple-800" : ""}`}
+                        <div className="space-y-2">
+                            {billingHistory.map((invoice) => (
+                                <div
+                                    key={invoice.id}
+                                    className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors"
                                 >
-                                    {plan.popular && (
-                                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                                            <Badge className="bg-purple-600">
-                                                <Zap className="h-3 w-3 mr-1" />
-                                                Most Popular
-                                            </Badge>
+                                    <div className="flex items-center gap-3 min-w-0">
+                                        <FileText className="h-7 w-7 text-muted-foreground shrink-0" />
+                                        <div className="min-w-0">
+                                            <p className="text-sm font-medium truncate">{invoice.description}</p>
+                                            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                                                <Calendar className="h-3 w-3" />
+                                                {invoice.date}
+                                                <Badge variant="secondary" className="text-xs capitalize">
+                                                    {invoice.status}
+                                                </Badge>
+                                            </div>
                                         </div>
-                                    )}
-
-                                    <CardHeader>
-                                        <CardTitle className="flex items-center justify-between">
-                                            {plan.name}
-                                            {plan.current && (
-                                                <Badge variant="secondary">Current</Badge>
-                                            )}
-                                        </CardTitle>
-                                        <div className="text-3xl font-bold">
-                                            {plan.price}
-                                            <span className="text-sm font-normal text-muted-foreground">
-                                                {plan.period !== "forever" && `/${plan.period}`}
-                                            </span>
-                                        </div>
-                                        <CardDescription>{plan.description}</CardDescription>
-                                    </CardHeader>
-
-                                    <CardContent>
-                                        <ul className="space-y-3">
-                                            {plan.features.map((feature, index) => (
-                                                <li key={index} className="flex items-center gap-2 text-sm">
-                                                    <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
-                                                    {feature}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </CardContent>
-
-                                    <CardFooter>
+                                    </div>
+                                    <div className="flex items-center gap-3 shrink-0">
+                                        <p className="text-sm font-semibold">{invoice.amount}</p>
                                         <Button
-                                            className="w-full"
-                                            variant={plan.current ? "outline" : "default"}
-                                            onClick={() => handlePlanChange(plan.id)}
-                                            disabled={plan.current}
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-8 w-8"
+                                            onClick={() => handleDownloadInvoice(invoice.id)}
                                         >
-                                            {plan.cta}
+                                            <Download className="h-4 w-4" />
                                         </Button>
-                                    </CardFooter>
-                                </Card>
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     </CardContent>
                 </Card>
+            </motion.div>
 
-                {/* Usage Summary */}
+            <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: 0.25 }}
+            >
                 <Card>
-                    <CardHeader>
-                        <CardTitle>Usage Summary</CardTitle>
-                        <CardDescription>Your current plan usage for this billing period</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Social Accounts</span>
-                                    <span className="font-medium">7/10</span>
-                                </div>
-                                <div className="w-full bg-muted rounded-full h-2">
-                                    <div
-                                        className="bg-blue-600 h-2 rounded-full"
-                                        style={{ width: '70%' }}
-                                    />
-                                </div>
+                    <CardContent className="p-5 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
+                                <Switch
+                                    checked={billingInfo.autoRenew}
+                                    onCheckedChange={(checked) => setBillingInfo(prev => ({ ...prev, autoRenew: checked }))}
+                                />
                             </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Scheduled Posts</span>
-                                    <span className="font-medium">245/∞</span>
-                                </div>
-                                <div className="w-full bg-muted rounded-full h-2">
-                                    <div
-                                        className="bg-green-600 h-2 rounded-full"
-                                        style={{ width: '45%' }}
-                                    />
-                                </div>
+                            <div>
+                                <p className="text-sm font-medium">Auto-renewal</p>
+                                <p className="text-xs text-muted-foreground">Your plan will automatically renew</p>
                             </div>
-
-                            <div className="space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">AI Content Usage</span>
-                                    <span className="font-medium">89/100</span>
-                                </div>
-                                <div className="w-full bg-muted rounded-full h-2">
-                                    <div
-                                        className="bg-purple-600 h-2 rounded-full"
-                                        style={{ width: '89%' }}
-                                    />
-                                </div>
-                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <Button variant="outline" size="sm" onClick={handleCancelSubscription}>
+                                Cancel Subscription
+                            </Button>
+                            <Button size="sm" onClick={handleUpdatePaymentMethod}>
+                                Update Payment
+                            </Button>
                         </div>
                     </CardContent>
                 </Card>
-            </div>
+            </motion.div>
         </div>
     )
 }

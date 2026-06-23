@@ -5,11 +5,9 @@ import { useEffect } from "react"
 const Page = () => {
     const { replace } = useRouter()
     useEffect(() => {
-        replace("/app/")
+        replace("/app/chat")
     }, [replace])
-    return (
-    <></>
-  )
+    return null
 }
 
 export default Page

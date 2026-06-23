@@ -5,8 +5,9 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -41,6 +42,20 @@ enum PostStatus {
   DRAFT
 }
 
+enum MediaAssetType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  BANNER
+  CAROUSEL
+  THUMBNAIL
+}
+
+enum MediaSource {
+  GENERATED
+  UPLOADED
+}
+
 model User {
   id         String  @id @default(uuid())
   name       String
@@ -56,8 +71,28 @@ model User {
   sessions      Session[]
   conversations Conversation[]
   posts         Post[]
+  mediaAssets   MediaAsset[]
 
   @@map("users")
+}
+
+model MediaAsset {
+  id         String         @id @default(cuid())
+  userId     String         @map("user_id")
+  name       String
+  url        String
+  type       MediaAssetType
+  source     MediaSource
+  size       Int?
+  width      Int?
+  height     Int?
+  metadata   Json?
+  isFavorite Boolean        @default(false) @map("is_favorite")
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+  user       User           @relation(fields: [userId], references: [id])
+
+  @@map("media_assets")
 }
 
 model UserIdentity {
@@ -139,23 +174,25 @@ model Message {
 }
 
 model Post {
-  id             String   @id @default(uuid())
-  messageId      String   @unique @map("message_id")
-  userId         String   @map("user_id")
-  conversationId String   @map("conversation_id")
-  platform       Platform
-  content        String
-  hashtags       String[]
-  engagement     Json? // {"views": "12.4K", "likes": 200}
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  id                     String     @id @default(uuid())
+  messageId              String     @unique @map("message_id")
+  userId                 String     @map("user_id")
+  conversationId         String     @map("conversation_id")
+  platform               Platform
+  content                String
+  hashtags               String[]
+  media                  Json? // [{ id, name, url, type, size, width, height }]
+  editedContent          String?    @map("edited_content") // user-edited version of the post
+  engagement             Json?
+  version                Int        @default(1)
+  isAccepted             Boolean    @default(false) @map("is_accepted")
+  isLastConversationPost Boolean    @default(false) @map("is_last_conversation_post")
+  status                 PostStatus @default(DRAFT)
+  createdAt              DateTime   @default(now()) @map("created_at")
+  updatedAt              DateTime   @updatedAt @map("updated_at")
 
   publishedAt DateTime? @map("published_at")
   scheduledAt DateTime? @map("scheduled_at")
-
-  status PostStatus @default(DRAFT)
-
-  isLastConversationPost Boolean @map("is_last_conversation_post")
 
   message      Message      @relation(fields: [messageId], references: [id])
   user         User         @relation(fields: [userId], references: [id])

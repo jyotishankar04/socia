@@ -1,8 +1,9 @@
 import express, { type Request, type Response, type NextFunction } from "express"
 import logger from "./config/logger";
 import type { HttpError } from "http-errors";
-import authRoutes from "./routes/auth.routes";
-import chatRoutes from "./routes/chat.routes";
+import authRoutes from "./modules/auth/auth.routes";
+import chatRoutes from "./modules/chat/chat.routes";
+import mediaRoutes from "./modules/media/media.routes";
 import useragent from "express-useragent";
 import cookieParser from "cookie-parser";
 import cors from "cors"
@@ -10,7 +11,8 @@ import _env from "./config";
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ extended: true, limit: "20mb" }));
 app.use(useragent.express());
 app.use(cookieParser());
 app.use(cors({
@@ -25,6 +27,7 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/conversations", chatRoutes);
+app.use("/api/v1/media", mediaRoutes);
 app.get('/health', (req:Request, res) => {
     
     res.status(200).send({

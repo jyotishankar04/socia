@@ -1,4 +1,5 @@
 import { Spinner } from "@/components/ui/spinner"
+import { cn } from "@/lib/utils"
 
 interface LoadingModalProps {
     text: string
@@ -32,42 +33,25 @@ const LoadingModal: React.FC<LoadingModalProps> = ({
     }
 
     return (
-        <div className={`${centered ? "fixed inset-0 z-100 flex items-center justify-center" : "w-full"}`}>
-            {/* Backdrop - only for centered modal */}
+        <div className={cn(centered && "fixed inset-0 z-100 flex items-center justify-center")}>
             {centered && (
                 <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
             )}
-
-            {/* Modal Content */}
             <div
-                className={`
-                    relative z-10
-                    ${sizeClasses[size]}
-                    animate-in fade-in-0 zoom-in-95 duration-200
-                    border border-border bg-card text-card-foreground
-                    rounded-lg shadow-lg
-                    w-full mx-4
-                `}
+                className={cn(
+                    "relative z-10",
+                    sizeClasses[size],
+                    "animate-in fade-in-0 zoom-in-95 duration-200",
+                    "border border-border bg-card text-card-foreground rounded-xl shadow-lg",
+                    "w-full mx-4"
+                )}
             >
-                <div className="flex flex-col items-center gap-6 p-6">
-                    {/* Animated Spinner */}
+                <div className="flex flex-col items-center gap-5 p-6">
                     <div className="flex justify-center">
-                        <Spinner
-                            className={`
-                                ${spinnerSizes[size]} 
-                                text-primary 
-                                animate-spin
-                            `}
-                        />
+                        <Spinner className={cn(spinnerSizes[size], "text-primary animate-spin")} />
                     </div>
-
-                    {/* Text Content */}
-                    <div className="flex flex-col items-center gap-3 text-center">
-                        <h1 className={`
-                            ${textSizes[size]}
-                            font-semibold text-foreground
-                            animate-pulse
-                        `}>
+                    <div className="flex flex-col items-center gap-2 text-center">
+                        <h1 className={cn(textSizes[size], "font-semibold text-foreground")}>
                             {text}
                         </h1>
                         <p className="text-sm text-muted-foreground leading-relaxed">

@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model MediaAsset
+ * 
+ */
+export type MediaAsset = $Result.DefaultSelection<Prisma.$MediaAssetPayload>
+/**
  * Model UserIdentity
  * 
  */
@@ -94,6 +99,26 @@ export const PostStatus: {
 
 export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
 
+
+export const MediaAssetType: {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT',
+  BANNER: 'BANNER',
+  CAROUSEL: 'CAROUSEL',
+  THUMBNAIL: 'THUMBNAIL'
+};
+
+export type MediaAssetType = (typeof MediaAssetType)[keyof typeof MediaAssetType]
+
+
+export const MediaSource: {
+  GENERATED: 'GENERATED',
+  UPLOADED: 'UPLOADED'
+};
+
+export type MediaSource = (typeof MediaSource)[keyof typeof MediaSource]
+
 }
 
 export type Role = $Enums.Role
@@ -115,6 +140,14 @@ export const Platform: typeof $Enums.Platform
 export type PostStatus = $Enums.PostStatus
 
 export const PostStatus: typeof $Enums.PostStatus
+
+export type MediaAssetType = $Enums.MediaAssetType
+
+export const MediaAssetType: typeof $Enums.MediaAssetType
+
+export type MediaSource = $Enums.MediaSource
+
+export const MediaSource: typeof $Enums.MediaSource
 
 /**
  * ##  Prisma Client ʲˢ
@@ -243,6 +276,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mediaAsset`: Exposes CRUD operations for the **MediaAsset** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MediaAssets
+    * const mediaAssets = await prisma.mediaAsset.findMany()
+    * ```
+    */
+  get mediaAsset(): Prisma.MediaAssetDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.userIdentity`: Exposes CRUD operations for the **UserIdentity** model.
@@ -744,6 +787,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    MediaAsset: 'MediaAsset',
     UserIdentity: 'UserIdentity',
     EmailOtp: 'EmailOtp',
     Session: 'Session',
@@ -768,7 +812,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "userIdentity" | "emailOtp" | "session" | "conversation" | "message" | "post"
+      modelProps: "user" | "mediaAsset" | "userIdentity" | "emailOtp" | "session" | "conversation" | "message" | "post"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -843,6 +887,80 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      MediaAsset: {
+        payload: Prisma.$MediaAssetPayload<ExtArgs>
+        fields: Prisma.MediaAssetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MediaAssetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MediaAssetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>
+          }
+          findFirst: {
+            args: Prisma.MediaAssetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MediaAssetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>
+          }
+          findMany: {
+            args: Prisma.MediaAssetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>[]
+          }
+          create: {
+            args: Prisma.MediaAssetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>
+          }
+          createMany: {
+            args: Prisma.MediaAssetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MediaAssetCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>[]
+          }
+          delete: {
+            args: Prisma.MediaAssetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>
+          }
+          update: {
+            args: Prisma.MediaAssetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>
+          }
+          deleteMany: {
+            args: Prisma.MediaAssetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MediaAssetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MediaAssetUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>[]
+          }
+          upsert: {
+            args: Prisma.MediaAssetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MediaAssetPayload>
+          }
+          aggregate: {
+            args: Prisma.MediaAssetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMediaAsset>
+          }
+          groupBy: {
+            args: Prisma.MediaAssetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MediaAssetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MediaAssetCountArgs<ExtArgs>
+            result: $Utils.Optional<MediaAssetCountAggregateOutputType> | number
           }
         }
       }
@@ -1387,6 +1505,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    mediaAsset?: MediaAssetOmit
     userIdentity?: UserIdentityOmit
     emailOtp?: EmailOtpOmit
     session?: SessionOmit
@@ -1476,12 +1595,14 @@ export namespace Prisma {
     sessions: number
     conversations: number
     posts: number
+    mediaAssets: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     conversations?: boolean | UserCountOutputTypeCountConversationsArgs
     posts?: boolean | UserCountOutputTypeCountPostsArgs
+    mediaAssets?: boolean | UserCountOutputTypeCountMediaAssetsArgs
   }
 
   // Custom InputTypes
@@ -1514,6 +1635,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMediaAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MediaAssetWhereInput
   }
 
 
@@ -1760,6 +1888,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     conversations?: boolean | User$conversationsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
+    mediaAssets?: boolean | User$mediaAssetsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1804,6 +1933,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     conversations?: boolean | User$conversationsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
+    mediaAssets?: boolean | User$mediaAssetsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1815,6 +1945,7 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       conversations: Prisma.$ConversationPayload<ExtArgs>[]
       posts: Prisma.$PostPayload<ExtArgs>[]
+      mediaAssets: Prisma.$MediaAssetPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2223,6 +2354,7 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     conversations<T extends User$conversationsArgs<ExtArgs> = {}>(args?: Subset<T, User$conversationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ConversationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mediaAssets<T extends User$mediaAssetsArgs<ExtArgs> = {}>(args?: Subset<T, User$mediaAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2721,6 +2853,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.mediaAssets
+   */
+  export type User$mediaAssetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    where?: MediaAssetWhereInput
+    orderBy?: MediaAssetOrderByWithRelationInput | MediaAssetOrderByWithRelationInput[]
+    cursor?: MediaAssetWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MediaAssetScalarFieldEnum | MediaAssetScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2736,6 +2892,1206 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MediaAsset
+   */
+
+  export type AggregateMediaAsset = {
+    _count: MediaAssetCountAggregateOutputType | null
+    _avg: MediaAssetAvgAggregateOutputType | null
+    _sum: MediaAssetSumAggregateOutputType | null
+    _min: MediaAssetMinAggregateOutputType | null
+    _max: MediaAssetMaxAggregateOutputType | null
+  }
+
+  export type MediaAssetAvgAggregateOutputType = {
+    size: number | null
+    width: number | null
+    height: number | null
+  }
+
+  export type MediaAssetSumAggregateOutputType = {
+    size: number | null
+    width: number | null
+    height: number | null
+  }
+
+  export type MediaAssetMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    url: string | null
+    type: $Enums.MediaAssetType | null
+    source: $Enums.MediaSource | null
+    size: number | null
+    width: number | null
+    height: number | null
+    isFavorite: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MediaAssetMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    url: string | null
+    type: $Enums.MediaAssetType | null
+    source: $Enums.MediaSource | null
+    size: number | null
+    width: number | null
+    height: number | null
+    isFavorite: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MediaAssetCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    url: number
+    type: number
+    source: number
+    size: number
+    width: number
+    height: number
+    metadata: number
+    isFavorite: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MediaAssetAvgAggregateInputType = {
+    size?: true
+    width?: true
+    height?: true
+  }
+
+  export type MediaAssetSumAggregateInputType = {
+    size?: true
+    width?: true
+    height?: true
+  }
+
+  export type MediaAssetMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    url?: true
+    type?: true
+    source?: true
+    size?: true
+    width?: true
+    height?: true
+    isFavorite?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MediaAssetMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    url?: true
+    type?: true
+    source?: true
+    size?: true
+    width?: true
+    height?: true
+    isFavorite?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MediaAssetCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    url?: true
+    type?: true
+    source?: true
+    size?: true
+    width?: true
+    height?: true
+    metadata?: true
+    isFavorite?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MediaAssetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MediaAsset to aggregate.
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MediaAssets to fetch.
+     */
+    orderBy?: MediaAssetOrderByWithRelationInput | MediaAssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MediaAssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MediaAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MediaAssets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MediaAssets
+    **/
+    _count?: true | MediaAssetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MediaAssetAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MediaAssetSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MediaAssetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MediaAssetMaxAggregateInputType
+  }
+
+  export type GetMediaAssetAggregateType<T extends MediaAssetAggregateArgs> = {
+        [P in keyof T & keyof AggregateMediaAsset]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMediaAsset[P]>
+      : GetScalarType<T[P], AggregateMediaAsset[P]>
+  }
+
+
+
+
+  export type MediaAssetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MediaAssetWhereInput
+    orderBy?: MediaAssetOrderByWithAggregationInput | MediaAssetOrderByWithAggregationInput[]
+    by: MediaAssetScalarFieldEnum[] | MediaAssetScalarFieldEnum
+    having?: MediaAssetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MediaAssetCountAggregateInputType | true
+    _avg?: MediaAssetAvgAggregateInputType
+    _sum?: MediaAssetSumAggregateInputType
+    _min?: MediaAssetMinAggregateInputType
+    _max?: MediaAssetMaxAggregateInputType
+  }
+
+  export type MediaAssetGroupByOutputType = {
+    id: string
+    userId: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size: number | null
+    width: number | null
+    height: number | null
+    metadata: JsonValue | null
+    isFavorite: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: MediaAssetCountAggregateOutputType | null
+    _avg: MediaAssetAvgAggregateOutputType | null
+    _sum: MediaAssetSumAggregateOutputType | null
+    _min: MediaAssetMinAggregateOutputType | null
+    _max: MediaAssetMaxAggregateOutputType | null
+  }
+
+  type GetMediaAssetGroupByPayload<T extends MediaAssetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MediaAssetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MediaAssetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MediaAssetGroupByOutputType[P]>
+            : GetScalarType<T[P], MediaAssetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MediaAssetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    url?: boolean
+    type?: boolean
+    source?: boolean
+    size?: boolean
+    width?: boolean
+    height?: boolean
+    metadata?: boolean
+    isFavorite?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mediaAsset"]>
+
+  export type MediaAssetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    url?: boolean
+    type?: boolean
+    source?: boolean
+    size?: boolean
+    width?: boolean
+    height?: boolean
+    metadata?: boolean
+    isFavorite?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mediaAsset"]>
+
+  export type MediaAssetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    url?: boolean
+    type?: boolean
+    source?: boolean
+    size?: boolean
+    width?: boolean
+    height?: boolean
+    metadata?: boolean
+    isFavorite?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mediaAsset"]>
+
+  export type MediaAssetSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    url?: boolean
+    type?: boolean
+    source?: boolean
+    size?: boolean
+    width?: boolean
+    height?: boolean
+    metadata?: boolean
+    isFavorite?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MediaAssetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "url" | "type" | "source" | "size" | "width" | "height" | "metadata" | "isFavorite" | "createdAt" | "updatedAt", ExtArgs["result"]["mediaAsset"]>
+  export type MediaAssetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MediaAssetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MediaAssetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MediaAssetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MediaAsset"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      name: string
+      url: string
+      type: $Enums.MediaAssetType
+      source: $Enums.MediaSource
+      size: number | null
+      width: number | null
+      height: number | null
+      metadata: Prisma.JsonValue | null
+      isFavorite: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mediaAsset"]>
+    composites: {}
+  }
+
+  type MediaAssetGetPayload<S extends boolean | null | undefined | MediaAssetDefaultArgs> = $Result.GetResult<Prisma.$MediaAssetPayload, S>
+
+  type MediaAssetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MediaAssetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MediaAssetCountAggregateInputType | true
+    }
+
+  export interface MediaAssetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MediaAsset'], meta: { name: 'MediaAsset' } }
+    /**
+     * Find zero or one MediaAsset that matches the filter.
+     * @param {MediaAssetFindUniqueArgs} args - Arguments to find a MediaAsset
+     * @example
+     * // Get one MediaAsset
+     * const mediaAsset = await prisma.mediaAsset.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MediaAssetFindUniqueArgs>(args: SelectSubset<T, MediaAssetFindUniqueArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MediaAsset that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MediaAssetFindUniqueOrThrowArgs} args - Arguments to find a MediaAsset
+     * @example
+     * // Get one MediaAsset
+     * const mediaAsset = await prisma.mediaAsset.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MediaAssetFindUniqueOrThrowArgs>(args: SelectSubset<T, MediaAssetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MediaAsset that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetFindFirstArgs} args - Arguments to find a MediaAsset
+     * @example
+     * // Get one MediaAsset
+     * const mediaAsset = await prisma.mediaAsset.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MediaAssetFindFirstArgs>(args?: SelectSubset<T, MediaAssetFindFirstArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MediaAsset that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetFindFirstOrThrowArgs} args - Arguments to find a MediaAsset
+     * @example
+     * // Get one MediaAsset
+     * const mediaAsset = await prisma.mediaAsset.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MediaAssetFindFirstOrThrowArgs>(args?: SelectSubset<T, MediaAssetFindFirstOrThrowArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MediaAssets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MediaAssets
+     * const mediaAssets = await prisma.mediaAsset.findMany()
+     * 
+     * // Get first 10 MediaAssets
+     * const mediaAssets = await prisma.mediaAsset.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mediaAssetWithIdOnly = await prisma.mediaAsset.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MediaAssetFindManyArgs>(args?: SelectSubset<T, MediaAssetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MediaAsset.
+     * @param {MediaAssetCreateArgs} args - Arguments to create a MediaAsset.
+     * @example
+     * // Create one MediaAsset
+     * const MediaAsset = await prisma.mediaAsset.create({
+     *   data: {
+     *     // ... data to create a MediaAsset
+     *   }
+     * })
+     * 
+     */
+    create<T extends MediaAssetCreateArgs>(args: SelectSubset<T, MediaAssetCreateArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MediaAssets.
+     * @param {MediaAssetCreateManyArgs} args - Arguments to create many MediaAssets.
+     * @example
+     * // Create many MediaAssets
+     * const mediaAsset = await prisma.mediaAsset.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MediaAssetCreateManyArgs>(args?: SelectSubset<T, MediaAssetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MediaAssets and returns the data saved in the database.
+     * @param {MediaAssetCreateManyAndReturnArgs} args - Arguments to create many MediaAssets.
+     * @example
+     * // Create many MediaAssets
+     * const mediaAsset = await prisma.mediaAsset.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MediaAssets and only return the `id`
+     * const mediaAssetWithIdOnly = await prisma.mediaAsset.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MediaAssetCreateManyAndReturnArgs>(args?: SelectSubset<T, MediaAssetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MediaAsset.
+     * @param {MediaAssetDeleteArgs} args - Arguments to delete one MediaAsset.
+     * @example
+     * // Delete one MediaAsset
+     * const MediaAsset = await prisma.mediaAsset.delete({
+     *   where: {
+     *     // ... filter to delete one MediaAsset
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MediaAssetDeleteArgs>(args: SelectSubset<T, MediaAssetDeleteArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MediaAsset.
+     * @param {MediaAssetUpdateArgs} args - Arguments to update one MediaAsset.
+     * @example
+     * // Update one MediaAsset
+     * const mediaAsset = await prisma.mediaAsset.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MediaAssetUpdateArgs>(args: SelectSubset<T, MediaAssetUpdateArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MediaAssets.
+     * @param {MediaAssetDeleteManyArgs} args - Arguments to filter MediaAssets to delete.
+     * @example
+     * // Delete a few MediaAssets
+     * const { count } = await prisma.mediaAsset.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MediaAssetDeleteManyArgs>(args?: SelectSubset<T, MediaAssetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MediaAssets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MediaAssets
+     * const mediaAsset = await prisma.mediaAsset.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MediaAssetUpdateManyArgs>(args: SelectSubset<T, MediaAssetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MediaAssets and returns the data updated in the database.
+     * @param {MediaAssetUpdateManyAndReturnArgs} args - Arguments to update many MediaAssets.
+     * @example
+     * // Update many MediaAssets
+     * const mediaAsset = await prisma.mediaAsset.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MediaAssets and only return the `id`
+     * const mediaAssetWithIdOnly = await prisma.mediaAsset.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MediaAssetUpdateManyAndReturnArgs>(args: SelectSubset<T, MediaAssetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MediaAsset.
+     * @param {MediaAssetUpsertArgs} args - Arguments to update or create a MediaAsset.
+     * @example
+     * // Update or create a MediaAsset
+     * const mediaAsset = await prisma.mediaAsset.upsert({
+     *   create: {
+     *     // ... data to create a MediaAsset
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MediaAsset we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MediaAssetUpsertArgs>(args: SelectSubset<T, MediaAssetUpsertArgs<ExtArgs>>): Prisma__MediaAssetClient<$Result.GetResult<Prisma.$MediaAssetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MediaAssets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetCountArgs} args - Arguments to filter MediaAssets to count.
+     * @example
+     * // Count the number of MediaAssets
+     * const count = await prisma.mediaAsset.count({
+     *   where: {
+     *     // ... the filter for the MediaAssets we want to count
+     *   }
+     * })
+    **/
+    count<T extends MediaAssetCountArgs>(
+      args?: Subset<T, MediaAssetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MediaAssetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MediaAsset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MediaAssetAggregateArgs>(args: Subset<T, MediaAssetAggregateArgs>): Prisma.PrismaPromise<GetMediaAssetAggregateType<T>>
+
+    /**
+     * Group by MediaAsset.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MediaAssetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MediaAssetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MediaAssetGroupByArgs['orderBy'] }
+        : { orderBy?: MediaAssetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MediaAssetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMediaAssetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MediaAsset model
+   */
+  readonly fields: MediaAssetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MediaAsset.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MediaAssetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MediaAsset model
+   */
+  interface MediaAssetFieldRefs {
+    readonly id: FieldRef<"MediaAsset", 'String'>
+    readonly userId: FieldRef<"MediaAsset", 'String'>
+    readonly name: FieldRef<"MediaAsset", 'String'>
+    readonly url: FieldRef<"MediaAsset", 'String'>
+    readonly type: FieldRef<"MediaAsset", 'MediaAssetType'>
+    readonly source: FieldRef<"MediaAsset", 'MediaSource'>
+    readonly size: FieldRef<"MediaAsset", 'Int'>
+    readonly width: FieldRef<"MediaAsset", 'Int'>
+    readonly height: FieldRef<"MediaAsset", 'Int'>
+    readonly metadata: FieldRef<"MediaAsset", 'Json'>
+    readonly isFavorite: FieldRef<"MediaAsset", 'Boolean'>
+    readonly createdAt: FieldRef<"MediaAsset", 'DateTime'>
+    readonly updatedAt: FieldRef<"MediaAsset", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MediaAsset findUnique
+   */
+  export type MediaAssetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * Filter, which MediaAsset to fetch.
+     */
+    where: MediaAssetWhereUniqueInput
+  }
+
+  /**
+   * MediaAsset findUniqueOrThrow
+   */
+  export type MediaAssetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * Filter, which MediaAsset to fetch.
+     */
+    where: MediaAssetWhereUniqueInput
+  }
+
+  /**
+   * MediaAsset findFirst
+   */
+  export type MediaAssetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * Filter, which MediaAsset to fetch.
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MediaAssets to fetch.
+     */
+    orderBy?: MediaAssetOrderByWithRelationInput | MediaAssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MediaAssets.
+     */
+    cursor?: MediaAssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MediaAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MediaAssets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MediaAssets.
+     */
+    distinct?: MediaAssetScalarFieldEnum | MediaAssetScalarFieldEnum[]
+  }
+
+  /**
+   * MediaAsset findFirstOrThrow
+   */
+  export type MediaAssetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * Filter, which MediaAsset to fetch.
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MediaAssets to fetch.
+     */
+    orderBy?: MediaAssetOrderByWithRelationInput | MediaAssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MediaAssets.
+     */
+    cursor?: MediaAssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MediaAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MediaAssets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MediaAssets.
+     */
+    distinct?: MediaAssetScalarFieldEnum | MediaAssetScalarFieldEnum[]
+  }
+
+  /**
+   * MediaAsset findMany
+   */
+  export type MediaAssetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * Filter, which MediaAssets to fetch.
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MediaAssets to fetch.
+     */
+    orderBy?: MediaAssetOrderByWithRelationInput | MediaAssetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MediaAssets.
+     */
+    cursor?: MediaAssetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MediaAssets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MediaAssets.
+     */
+    skip?: number
+    distinct?: MediaAssetScalarFieldEnum | MediaAssetScalarFieldEnum[]
+  }
+
+  /**
+   * MediaAsset create
+   */
+  export type MediaAssetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MediaAsset.
+     */
+    data: XOR<MediaAssetCreateInput, MediaAssetUncheckedCreateInput>
+  }
+
+  /**
+   * MediaAsset createMany
+   */
+  export type MediaAssetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MediaAssets.
+     */
+    data: MediaAssetCreateManyInput | MediaAssetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MediaAsset createManyAndReturn
+   */
+  export type MediaAssetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * The data used to create many MediaAssets.
+     */
+    data: MediaAssetCreateManyInput | MediaAssetCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MediaAsset update
+   */
+  export type MediaAssetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MediaAsset.
+     */
+    data: XOR<MediaAssetUpdateInput, MediaAssetUncheckedUpdateInput>
+    /**
+     * Choose, which MediaAsset to update.
+     */
+    where: MediaAssetWhereUniqueInput
+  }
+
+  /**
+   * MediaAsset updateMany
+   */
+  export type MediaAssetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MediaAssets.
+     */
+    data: XOR<MediaAssetUpdateManyMutationInput, MediaAssetUncheckedUpdateManyInput>
+    /**
+     * Filter which MediaAssets to update
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * Limit how many MediaAssets to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MediaAsset updateManyAndReturn
+   */
+  export type MediaAssetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * The data used to update MediaAssets.
+     */
+    data: XOR<MediaAssetUpdateManyMutationInput, MediaAssetUncheckedUpdateManyInput>
+    /**
+     * Filter which MediaAssets to update
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * Limit how many MediaAssets to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MediaAsset upsert
+   */
+  export type MediaAssetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MediaAsset to update in case it exists.
+     */
+    where: MediaAssetWhereUniqueInput
+    /**
+     * In case the MediaAsset found by the `where` argument doesn't exist, create a new MediaAsset with this data.
+     */
+    create: XOR<MediaAssetCreateInput, MediaAssetUncheckedCreateInput>
+    /**
+     * In case the MediaAsset was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MediaAssetUpdateInput, MediaAssetUncheckedUpdateInput>
+  }
+
+  /**
+   * MediaAsset delete
+   */
+  export type MediaAssetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
+    /**
+     * Filter which MediaAsset to delete.
+     */
+    where: MediaAssetWhereUniqueInput
+  }
+
+  /**
+   * MediaAsset deleteMany
+   */
+  export type MediaAssetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MediaAssets to delete
+     */
+    where?: MediaAssetWhereInput
+    /**
+     * Limit how many MediaAssets to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MediaAsset without action
+   */
+  export type MediaAssetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MediaAsset
+     */
+    select?: MediaAssetSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MediaAsset
+     */
+    omit?: MediaAssetOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MediaAssetInclude<ExtArgs> | null
   }
 
 
@@ -8129,8 +9485,18 @@ export namespace Prisma {
 
   export type AggregatePost = {
     _count: PostCountAggregateOutputType | null
+    _avg: PostAvgAggregateOutputType | null
+    _sum: PostSumAggregateOutputType | null
     _min: PostMinAggregateOutputType | null
     _max: PostMaxAggregateOutputType | null
+  }
+
+  export type PostAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type PostSumAggregateOutputType = {
+    version: number | null
   }
 
   export type PostMinAggregateOutputType = {
@@ -8140,12 +9506,15 @@ export namespace Prisma {
     conversationId: string | null
     platform: $Enums.Platform | null
     content: string | null
+    editedContent: string | null
+    version: number | null
+    isAccepted: boolean | null
+    isLastConversationPost: boolean | null
+    status: $Enums.PostStatus | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
     scheduledAt: Date | null
-    status: $Enums.PostStatus | null
-    isLastConversationPost: boolean | null
   }
 
   export type PostMaxAggregateOutputType = {
@@ -8155,12 +9524,15 @@ export namespace Prisma {
     conversationId: string | null
     platform: $Enums.Platform | null
     content: string | null
+    editedContent: string | null
+    version: number | null
+    isAccepted: boolean | null
+    isLastConversationPost: boolean | null
+    status: $Enums.PostStatus | null
     createdAt: Date | null
     updatedAt: Date | null
     publishedAt: Date | null
     scheduledAt: Date | null
-    status: $Enums.PostStatus | null
-    isLastConversationPost: boolean | null
   }
 
   export type PostCountAggregateOutputType = {
@@ -8171,16 +9543,28 @@ export namespace Prisma {
     platform: number
     content: number
     hashtags: number
+    media: number
+    editedContent: number
     engagement: number
+    version: number
+    isAccepted: number
+    isLastConversationPost: number
+    status: number
     createdAt: number
     updatedAt: number
     publishedAt: number
     scheduledAt: number
-    status: number
-    isLastConversationPost: number
     _all: number
   }
 
+
+  export type PostAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type PostSumAggregateInputType = {
+    version?: true
+  }
 
   export type PostMinAggregateInputType = {
     id?: true
@@ -8189,12 +9573,15 @@ export namespace Prisma {
     conversationId?: true
     platform?: true
     content?: true
+    editedContent?: true
+    version?: true
+    isAccepted?: true
+    isLastConversationPost?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
     scheduledAt?: true
-    status?: true
-    isLastConversationPost?: true
   }
 
   export type PostMaxAggregateInputType = {
@@ -8204,12 +9591,15 @@ export namespace Prisma {
     conversationId?: true
     platform?: true
     content?: true
+    editedContent?: true
+    version?: true
+    isAccepted?: true
+    isLastConversationPost?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
     scheduledAt?: true
-    status?: true
-    isLastConversationPost?: true
   }
 
   export type PostCountAggregateInputType = {
@@ -8220,13 +9610,17 @@ export namespace Prisma {
     platform?: true
     content?: true
     hashtags?: true
+    media?: true
+    editedContent?: true
     engagement?: true
+    version?: true
+    isAccepted?: true
+    isLastConversationPost?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     publishedAt?: true
     scheduledAt?: true
-    status?: true
-    isLastConversationPost?: true
     _all?: true
   }
 
@@ -8268,6 +9662,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: PostAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PostSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: PostMinAggregateInputType
@@ -8298,6 +9704,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: PostCountAggregateInputType | true
+    _avg?: PostAvgAggregateInputType
+    _sum?: PostSumAggregateInputType
     _min?: PostMinAggregateInputType
     _max?: PostMaxAggregateInputType
   }
@@ -8310,14 +9718,20 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags: string[]
+    media: JsonValue | null
+    editedContent: string | null
     engagement: JsonValue | null
+    version: number
+    isAccepted: boolean
+    isLastConversationPost: boolean
+    status: $Enums.PostStatus
     createdAt: Date
     updatedAt: Date
     publishedAt: Date | null
     scheduledAt: Date | null
-    status: $Enums.PostStatus
-    isLastConversationPost: boolean
     _count: PostCountAggregateOutputType | null
+    _avg: PostAvgAggregateOutputType | null
+    _sum: PostSumAggregateOutputType | null
     _min: PostMinAggregateOutputType | null
     _max: PostMaxAggregateOutputType | null
   }
@@ -8344,13 +9758,17 @@ export namespace Prisma {
     platform?: boolean
     content?: boolean
     hashtags?: boolean
+    media?: boolean
+    editedContent?: boolean
     engagement?: boolean
+    version?: boolean
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
     scheduledAt?: boolean
-    status?: boolean
-    isLastConversationPost?: boolean
     message?: boolean | MessageDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
@@ -8364,13 +9782,17 @@ export namespace Prisma {
     platform?: boolean
     content?: boolean
     hashtags?: boolean
+    media?: boolean
+    editedContent?: boolean
     engagement?: boolean
+    version?: boolean
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
     scheduledAt?: boolean
-    status?: boolean
-    isLastConversationPost?: boolean
     message?: boolean | MessageDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
@@ -8384,13 +9806,17 @@ export namespace Prisma {
     platform?: boolean
     content?: boolean
     hashtags?: boolean
+    media?: boolean
+    editedContent?: boolean
     engagement?: boolean
+    version?: boolean
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
     scheduledAt?: boolean
-    status?: boolean
-    isLastConversationPost?: boolean
     message?: boolean | MessageDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
     conversation?: boolean | ConversationDefaultArgs<ExtArgs>
@@ -8404,16 +9830,20 @@ export namespace Prisma {
     platform?: boolean
     content?: boolean
     hashtags?: boolean
+    media?: boolean
+    editedContent?: boolean
     engagement?: boolean
+    version?: boolean
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     publishedAt?: boolean
     scheduledAt?: boolean
-    status?: boolean
-    isLastConversationPost?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "messageId" | "userId" | "conversationId" | "platform" | "content" | "hashtags" | "engagement" | "createdAt" | "updatedAt" | "publishedAt" | "scheduledAt" | "status" | "isLastConversationPost", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "messageId" | "userId" | "conversationId" | "platform" | "content" | "hashtags" | "media" | "editedContent" | "engagement" | "version" | "isAccepted" | "isLastConversationPost" | "status" | "createdAt" | "updatedAt" | "publishedAt" | "scheduledAt", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     message?: boolean | MessageDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8445,13 +9875,17 @@ export namespace Prisma {
       platform: $Enums.Platform
       content: string
       hashtags: string[]
+      media: Prisma.JsonValue | null
+      editedContent: string | null
       engagement: Prisma.JsonValue | null
+      version: number
+      isAccepted: boolean
+      isLastConversationPost: boolean
+      status: $Enums.PostStatus
       createdAt: Date
       updatedAt: Date
       publishedAt: Date | null
       scheduledAt: Date | null
-      status: $Enums.PostStatus
-      isLastConversationPost: boolean
     }, ExtArgs["result"]["post"]>
     composites: {}
   }
@@ -8885,13 +10319,17 @@ export namespace Prisma {
     readonly platform: FieldRef<"Post", 'Platform'>
     readonly content: FieldRef<"Post", 'String'>
     readonly hashtags: FieldRef<"Post", 'String[]'>
+    readonly media: FieldRef<"Post", 'Json'>
+    readonly editedContent: FieldRef<"Post", 'String'>
     readonly engagement: FieldRef<"Post", 'Json'>
+    readonly version: FieldRef<"Post", 'Int'>
+    readonly isAccepted: FieldRef<"Post", 'Boolean'>
+    readonly isLastConversationPost: FieldRef<"Post", 'Boolean'>
+    readonly status: FieldRef<"Post", 'PostStatus'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
     readonly updatedAt: FieldRef<"Post", 'DateTime'>
     readonly publishedAt: FieldRef<"Post", 'DateTime'>
     readonly scheduledAt: FieldRef<"Post", 'DateTime'>
-    readonly status: FieldRef<"Post", 'PostStatus'>
-    readonly isLastConversationPost: FieldRef<"Post", 'Boolean'>
   }
     
 
@@ -9335,6 +10773,25 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const MediaAssetScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    url: 'url',
+    type: 'type',
+    source: 'source',
+    size: 'size',
+    width: 'width',
+    height: 'height',
+    metadata: 'metadata',
+    isFavorite: 'isFavorite',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MediaAssetScalarFieldEnum = (typeof MediaAssetScalarFieldEnum)[keyof typeof MediaAssetScalarFieldEnum]
+
+
   export const UserIdentityScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -9409,13 +10866,17 @@ export namespace Prisma {
     platform: 'platform',
     content: 'content',
     hashtags: 'hashtags',
+    media: 'media',
+    editedContent: 'editedContent',
     engagement: 'engagement',
+    version: 'version',
+    isAccepted: 'isAccepted',
+    isLastConversationPost: 'isLastConversationPost',
+    status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     publishedAt: 'publishedAt',
-    scheduledAt: 'scheduledAt',
-    status: 'status',
-    isLastConversationPost: 'isLastConversationPost'
+    scheduledAt: 'scheduledAt'
   };
 
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
@@ -9517,6 +10978,62 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MediaAssetType'
+   */
+  export type EnumMediaAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaAssetType'>
+    
+
+
+  /**
+   * Reference to a field of type 'MediaAssetType[]'
+   */
+  export type ListEnumMediaAssetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaAssetType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MediaSource'
+   */
+  export type EnumMediaSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaSource'>
+    
+
+
+  /**
+   * Reference to a field of type 'MediaSource[]'
+   */
+  export type ListEnumMediaSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MediaSource[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
    * Reference to a field of type 'Provider'
    */
   export type EnumProviderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Provider'>
@@ -9559,20 +11076,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-  /**
    * Reference to a field of type 'PostStatus'
    */
   export type EnumPostStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PostStatus'>
@@ -9587,16 +11090,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Int'
+   * Reference to a field of type 'Float'
    */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
   /**
-   * Reference to a field of type 'Int[]'
+   * Reference to a field of type 'Float[]'
    */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -9619,6 +11122,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     conversations?: ConversationListRelationFilter
     posts?: PostListRelationFilter
+    mediaAssets?: MediaAssetListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -9634,6 +11138,7 @@ export namespace Prisma {
     sessions?: SessionOrderByRelationAggregateInput
     conversations?: ConversationOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
+    mediaAssets?: MediaAssetOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -9652,6 +11157,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     conversations?: ConversationListRelationFilter
     posts?: PostListRelationFilter
+    mediaAssets?: MediaAssetListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -9682,6 +11188,103 @@ export namespace Prisma {
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type MediaAssetWhereInput = {
+    AND?: MediaAssetWhereInput | MediaAssetWhereInput[]
+    OR?: MediaAssetWhereInput[]
+    NOT?: MediaAssetWhereInput | MediaAssetWhereInput[]
+    id?: StringFilter<"MediaAsset"> | string
+    userId?: StringFilter<"MediaAsset"> | string
+    name?: StringFilter<"MediaAsset"> | string
+    url?: StringFilter<"MediaAsset"> | string
+    type?: EnumMediaAssetTypeFilter<"MediaAsset"> | $Enums.MediaAssetType
+    source?: EnumMediaSourceFilter<"MediaAsset"> | $Enums.MediaSource
+    size?: IntNullableFilter<"MediaAsset"> | number | null
+    width?: IntNullableFilter<"MediaAsset"> | number | null
+    height?: IntNullableFilter<"MediaAsset"> | number | null
+    metadata?: JsonNullableFilter<"MediaAsset">
+    isFavorite?: BoolFilter<"MediaAsset"> | boolean
+    createdAt?: DateTimeFilter<"MediaAsset"> | Date | string
+    updatedAt?: DateTimeFilter<"MediaAsset"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type MediaAssetOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    size?: SortOrderInput | SortOrder
+    width?: SortOrderInput | SortOrder
+    height?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    isFavorite?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type MediaAssetWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MediaAssetWhereInput | MediaAssetWhereInput[]
+    OR?: MediaAssetWhereInput[]
+    NOT?: MediaAssetWhereInput | MediaAssetWhereInput[]
+    userId?: StringFilter<"MediaAsset"> | string
+    name?: StringFilter<"MediaAsset"> | string
+    url?: StringFilter<"MediaAsset"> | string
+    type?: EnumMediaAssetTypeFilter<"MediaAsset"> | $Enums.MediaAssetType
+    source?: EnumMediaSourceFilter<"MediaAsset"> | $Enums.MediaSource
+    size?: IntNullableFilter<"MediaAsset"> | number | null
+    width?: IntNullableFilter<"MediaAsset"> | number | null
+    height?: IntNullableFilter<"MediaAsset"> | number | null
+    metadata?: JsonNullableFilter<"MediaAsset">
+    isFavorite?: BoolFilter<"MediaAsset"> | boolean
+    createdAt?: DateTimeFilter<"MediaAsset"> | Date | string
+    updatedAt?: DateTimeFilter<"MediaAsset"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type MediaAssetOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    size?: SortOrderInput | SortOrder
+    width?: SortOrderInput | SortOrder
+    height?: SortOrderInput | SortOrder
+    metadata?: SortOrderInput | SortOrder
+    isFavorite?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MediaAssetCountOrderByAggregateInput
+    _avg?: MediaAssetAvgOrderByAggregateInput
+    _max?: MediaAssetMaxOrderByAggregateInput
+    _min?: MediaAssetMinOrderByAggregateInput
+    _sum?: MediaAssetSumOrderByAggregateInput
+  }
+
+  export type MediaAssetScalarWhereWithAggregatesInput = {
+    AND?: MediaAssetScalarWhereWithAggregatesInput | MediaAssetScalarWhereWithAggregatesInput[]
+    OR?: MediaAssetScalarWhereWithAggregatesInput[]
+    NOT?: MediaAssetScalarWhereWithAggregatesInput | MediaAssetScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MediaAsset"> | string
+    userId?: StringWithAggregatesFilter<"MediaAsset"> | string
+    name?: StringWithAggregatesFilter<"MediaAsset"> | string
+    url?: StringWithAggregatesFilter<"MediaAsset"> | string
+    type?: EnumMediaAssetTypeWithAggregatesFilter<"MediaAsset"> | $Enums.MediaAssetType
+    source?: EnumMediaSourceWithAggregatesFilter<"MediaAsset"> | $Enums.MediaSource
+    size?: IntNullableWithAggregatesFilter<"MediaAsset"> | number | null
+    width?: IntNullableWithAggregatesFilter<"MediaAsset"> | number | null
+    height?: IntNullableWithAggregatesFilter<"MediaAsset"> | number | null
+    metadata?: JsonNullableWithAggregatesFilter<"MediaAsset">
+    isFavorite?: BoolWithAggregatesFilter<"MediaAsset"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"MediaAsset"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MediaAsset"> | Date | string
   }
 
   export type UserIdentityWhereInput = {
@@ -10028,13 +11631,17 @@ export namespace Prisma {
     platform?: EnumPlatformFilter<"Post"> | $Enums.Platform
     content?: StringFilter<"Post"> | string
     hashtags?: StringNullableListFilter<"Post">
+    media?: JsonNullableFilter<"Post">
+    editedContent?: StringNullableFilter<"Post"> | string | null
     engagement?: JsonNullableFilter<"Post">
+    version?: IntFilter<"Post"> | number
+    isAccepted?: BoolFilter<"Post"> | boolean
+    isLastConversationPost?: BoolFilter<"Post"> | boolean
+    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     scheduledAt?: DateTimeNullableFilter<"Post"> | Date | string | null
-    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
-    isLastConversationPost?: BoolFilter<"Post"> | boolean
     message?: XOR<MessageScalarRelationFilter, MessageWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
@@ -10048,13 +11655,17 @@ export namespace Prisma {
     platform?: SortOrder
     content?: SortOrder
     hashtags?: SortOrder
+    media?: SortOrderInput | SortOrder
+    editedContent?: SortOrderInput | SortOrder
     engagement?: SortOrderInput | SortOrder
+    version?: SortOrder
+    isAccepted?: SortOrder
+    isLastConversationPost?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     scheduledAt?: SortOrderInput | SortOrder
-    status?: SortOrder
-    isLastConversationPost?: SortOrder
     message?: MessageOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
     conversation?: ConversationOrderByWithRelationInput
@@ -10071,13 +11682,17 @@ export namespace Prisma {
     platform?: EnumPlatformFilter<"Post"> | $Enums.Platform
     content?: StringFilter<"Post"> | string
     hashtags?: StringNullableListFilter<"Post">
+    media?: JsonNullableFilter<"Post">
+    editedContent?: StringNullableFilter<"Post"> | string | null
     engagement?: JsonNullableFilter<"Post">
+    version?: IntFilter<"Post"> | number
+    isAccepted?: BoolFilter<"Post"> | boolean
+    isLastConversationPost?: BoolFilter<"Post"> | boolean
+    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     scheduledAt?: DateTimeNullableFilter<"Post"> | Date | string | null
-    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
-    isLastConversationPost?: BoolFilter<"Post"> | boolean
     message?: XOR<MessageScalarRelationFilter, MessageWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     conversation?: XOR<ConversationScalarRelationFilter, ConversationWhereInput>
@@ -10091,16 +11706,22 @@ export namespace Prisma {
     platform?: SortOrder
     content?: SortOrder
     hashtags?: SortOrder
+    media?: SortOrderInput | SortOrder
+    editedContent?: SortOrderInput | SortOrder
     engagement?: SortOrderInput | SortOrder
+    version?: SortOrder
+    isAccepted?: SortOrder
+    isLastConversationPost?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     scheduledAt?: SortOrderInput | SortOrder
-    status?: SortOrder
-    isLastConversationPost?: SortOrder
     _count?: PostCountOrderByAggregateInput
+    _avg?: PostAvgOrderByAggregateInput
     _max?: PostMaxOrderByAggregateInput
     _min?: PostMinOrderByAggregateInput
+    _sum?: PostSumOrderByAggregateInput
   }
 
   export type PostScalarWhereWithAggregatesInput = {
@@ -10114,13 +11735,17 @@ export namespace Prisma {
     platform?: EnumPlatformWithAggregatesFilter<"Post"> | $Enums.Platform
     content?: StringWithAggregatesFilter<"Post"> | string
     hashtags?: StringNullableListFilter<"Post">
+    media?: JsonNullableWithAggregatesFilter<"Post">
+    editedContent?: StringNullableWithAggregatesFilter<"Post"> | string | null
     engagement?: JsonNullableWithAggregatesFilter<"Post">
+    version?: IntWithAggregatesFilter<"Post"> | number
+    isAccepted?: BoolWithAggregatesFilter<"Post"> | boolean
+    isLastConversationPost?: BoolWithAggregatesFilter<"Post"> | boolean
+    status?: EnumPostStatusWithAggregatesFilter<"Post"> | $Enums.PostStatus
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
     scheduledAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
-    status?: EnumPostStatusWithAggregatesFilter<"Post"> | $Enums.PostStatus
-    isLastConversationPost?: BoolWithAggregatesFilter<"Post"> | boolean
   }
 
   export type UserCreateInput = {
@@ -10136,6 +11761,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     conversations?: ConversationCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -10151,6 +11777,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -10166,6 +11793,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -10181,6 +11809,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -10215,6 +11844,117 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     isVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaAssetCreateInput = {
+    id?: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size?: number | null
+    width?: number | null
+    height?: number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutMediaAssetsInput
+  }
+
+  export type MediaAssetUncheckedCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size?: number | null
+    width?: number | null
+    height?: number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MediaAssetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMediaAssetsNestedInput
+  }
+
+  export type MediaAssetUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaAssetCreateManyInput = {
+    id?: string
+    userId: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size?: number | null
+    width?: number | null
+    height?: number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MediaAssetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaAssetUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10590,13 +12330,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
     message: MessageCreateNestedOneWithoutPostInput
     user: UserCreateNestedOneWithoutPostsInput
     conversation: ConversationCreateNestedOneWithoutPostsInput
@@ -10610,13 +12354,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
   }
 
   export type PostUpdateInput = {
@@ -10624,13 +12372,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
     message?: MessageUpdateOneRequiredWithoutPostNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutPostsNestedInput
@@ -10644,13 +12396,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PostCreateManyInput = {
@@ -10661,13 +12417,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
   }
 
   export type PostUpdateManyMutationInput = {
@@ -10675,13 +12435,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PostUncheckedUpdateManyInput = {
@@ -10692,13 +12456,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -10772,6 +12540,12 @@ export namespace Prisma {
     none?: PostWhereInput
   }
 
+  export type MediaAssetListRelationFilter = {
+    every?: MediaAssetWhereInput
+    some?: MediaAssetWhereInput
+    none?: MediaAssetWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -10786,6 +12560,10 @@ export namespace Prisma {
   }
 
   export type PostOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MediaAssetOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10893,6 +12671,179 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type EnumMediaAssetTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaAssetType | EnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaAssetTypeFilter<$PrismaModel> | $Enums.MediaAssetType
+  }
+
+  export type EnumMediaSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaSource | EnumMediaSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaSourceFilter<$PrismaModel> | $Enums.MediaSource
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type MediaAssetCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    size?: SortOrder
+    width?: SortOrder
+    height?: SortOrder
+    metadata?: SortOrder
+    isFavorite?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MediaAssetAvgOrderByAggregateInput = {
+    size?: SortOrder
+    width?: SortOrder
+    height?: SortOrder
+  }
+
+  export type MediaAssetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    size?: SortOrder
+    width?: SortOrder
+    height?: SortOrder
+    isFavorite?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MediaAssetMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    url?: SortOrder
+    type?: SortOrder
+    source?: SortOrder
+    size?: SortOrder
+    width?: SortOrder
+    height?: SortOrder
+    isFavorite?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MediaAssetSumOrderByAggregateInput = {
+    size?: SortOrder
+    width?: SortOrder
+    height?: SortOrder
+  }
+
+  export type EnumMediaAssetTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaAssetType | EnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaAssetTypeWithAggregatesFilter<$PrismaModel> | $Enums.MediaAssetType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaAssetTypeFilter<$PrismaModel>
+    _max?: NestedEnumMediaAssetTypeFilter<$PrismaModel>
+  }
+
+  export type EnumMediaSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaSource | EnumMediaSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaSourceWithAggregatesFilter<$PrismaModel> | $Enums.MediaSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaSourceFilter<$PrismaModel>
+    _max?: NestedEnumMediaSourceFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
   export type EnumProviderFilter<$PrismaModel = never> = {
     equals?: $Enums.Provider | EnumProviderFieldRefInput<$PrismaModel>
     in?: $Enums.Provider[] | ListEnumProviderFieldRefInput<$PrismaModel>
@@ -10968,11 +12919,6 @@ export namespace Prisma {
     expiresAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type SessionCountOrderByAggregateInput = {
@@ -11071,29 +13017,6 @@ export namespace Prisma {
     notIn?: $Enums.MessageRole[] | ListEnumMessageRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumMessageRoleFilter<$PrismaModel> | $Enums.MessageRole
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type PostNullableScalarRelationFilter = {
     is?: PostWhereInput | null
@@ -11142,32 +13065,6 @@ export namespace Prisma {
     _min?: NestedEnumMessageRoleFilter<$PrismaModel>
     _max?: NestedEnumMessageRoleFilter<$PrismaModel>
   }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
     equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11175,6 +13072,24 @@ export namespace Prisma {
     hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
     hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type EnumPostStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -11186,13 +13101,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type EnumPostStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
   }
 
   export type MessageScalarRelationFilter = {
@@ -11208,13 +13116,21 @@ export namespace Prisma {
     platform?: SortOrder
     content?: SortOrder
     hashtags?: SortOrder
+    media?: SortOrder
+    editedContent?: SortOrder
     engagement?: SortOrder
+    version?: SortOrder
+    isAccepted?: SortOrder
+    isLastConversationPost?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
     scheduledAt?: SortOrder
-    status?: SortOrder
-    isLastConversationPost?: SortOrder
+  }
+
+  export type PostAvgOrderByAggregateInput = {
+    version?: SortOrder
   }
 
   export type PostMaxOrderByAggregateInput = {
@@ -11224,12 +13140,15 @@ export namespace Prisma {
     conversationId?: SortOrder
     platform?: SortOrder
     content?: SortOrder
+    editedContent?: SortOrder
+    version?: SortOrder
+    isAccepted?: SortOrder
+    isLastConversationPost?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
     scheduledAt?: SortOrder
-    status?: SortOrder
-    isLastConversationPost?: SortOrder
   }
 
   export type PostMinOrderByAggregateInput = {
@@ -11239,12 +13158,45 @@ export namespace Prisma {
     conversationId?: SortOrder
     platform?: SortOrder
     content?: SortOrder
+    editedContent?: SortOrder
+    version?: SortOrder
+    isAccepted?: SortOrder
+    isLastConversationPost?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     publishedAt?: SortOrder
     scheduledAt?: SortOrder
-    status?: SortOrder
-    isLastConversationPost?: SortOrder
+  }
+
+  export type PostSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumPostStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusWithAggregatesFilter<$PrismaModel> | $Enums.PostStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPostStatusFilter<$PrismaModel>
+    _max?: NestedEnumPostStatusFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11259,16 +13211,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type EnumPostStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPostStatusWithAggregatesFilter<$PrismaModel> | $Enums.PostStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPostStatusFilter<$PrismaModel>
-    _max?: NestedEnumPostStatusFilter<$PrismaModel>
   }
 
   export type SessionCreateNestedManyWithoutUserInput = {
@@ -11292,6 +13234,13 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
+  export type MediaAssetCreateNestedManyWithoutUserInput = {
+    create?: XOR<MediaAssetCreateWithoutUserInput, MediaAssetUncheckedCreateWithoutUserInput> | MediaAssetCreateWithoutUserInput[] | MediaAssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaAssetCreateOrConnectWithoutUserInput | MediaAssetCreateOrConnectWithoutUserInput[]
+    createMany?: MediaAssetCreateManyUserInputEnvelope
+    connect?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+  }
+
   export type SessionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -11311,6 +13260,13 @@ export namespace Prisma {
     connectOrCreate?: PostCreateOrConnectWithoutUserInput | PostCreateOrConnectWithoutUserInput[]
     createMany?: PostCreateManyUserInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type MediaAssetUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<MediaAssetCreateWithoutUserInput, MediaAssetUncheckedCreateWithoutUserInput> | MediaAssetCreateWithoutUserInput[] | MediaAssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaAssetCreateOrConnectWithoutUserInput | MediaAssetCreateOrConnectWithoutUserInput[]
+    createMany?: MediaAssetCreateManyUserInputEnvelope
+    connect?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11375,6 +13331,20 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
+  export type MediaAssetUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MediaAssetCreateWithoutUserInput, MediaAssetUncheckedCreateWithoutUserInput> | MediaAssetCreateWithoutUserInput[] | MediaAssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaAssetCreateOrConnectWithoutUserInput | MediaAssetCreateOrConnectWithoutUserInput[]
+    upsert?: MediaAssetUpsertWithWhereUniqueWithoutUserInput | MediaAssetUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MediaAssetCreateManyUserInputEnvelope
+    set?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    disconnect?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    delete?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    connect?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    update?: MediaAssetUpdateWithWhereUniqueWithoutUserInput | MediaAssetUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MediaAssetUpdateManyWithWhereWithoutUserInput | MediaAssetUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MediaAssetScalarWhereInput | MediaAssetScalarWhereInput[]
+  }
+
   export type SessionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<SessionCreateWithoutUserInput, SessionUncheckedCreateWithoutUserInput> | SessionCreateWithoutUserInput[] | SessionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
@@ -11415,6 +13385,50 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutUserInput | PostUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PostUpdateManyWithWhereWithoutUserInput | PostUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type MediaAssetUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<MediaAssetCreateWithoutUserInput, MediaAssetUncheckedCreateWithoutUserInput> | MediaAssetCreateWithoutUserInput[] | MediaAssetUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: MediaAssetCreateOrConnectWithoutUserInput | MediaAssetCreateOrConnectWithoutUserInput[]
+    upsert?: MediaAssetUpsertWithWhereUniqueWithoutUserInput | MediaAssetUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: MediaAssetCreateManyUserInputEnvelope
+    set?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    disconnect?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    delete?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    connect?: MediaAssetWhereUniqueInput | MediaAssetWhereUniqueInput[]
+    update?: MediaAssetUpdateWithWhereUniqueWithoutUserInput | MediaAssetUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: MediaAssetUpdateManyWithWhereWithoutUserInput | MediaAssetUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: MediaAssetScalarWhereInput | MediaAssetScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutMediaAssetsInput = {
+    create?: XOR<UserCreateWithoutMediaAssetsInput, UserUncheckedCreateWithoutMediaAssetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMediaAssetsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumMediaAssetTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MediaAssetType
+  }
+
+  export type EnumMediaSourceFieldUpdateOperationsInput = {
+    set?: $Enums.MediaSource
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserUpdateOneRequiredWithoutMediaAssetsNestedInput = {
+    create?: XOR<UserCreateWithoutMediaAssetsInput, UserUncheckedCreateWithoutMediaAssetsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMediaAssetsInput
+    upsert?: UserUpsertWithoutMediaAssetsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMediaAssetsInput, UserUpdateWithoutMediaAssetsInput>, UserUncheckedUpdateWithoutMediaAssetsInput>
   }
 
   export type EnumProviderFieldUpdateOperationsInput = {
@@ -11614,12 +13628,20 @@ export namespace Prisma {
     push?: string | string[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type EnumPostStatusFieldUpdateOperationsInput = {
     set?: $Enums.PostStatus
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type MessageUpdateOneRequiredWithoutPostNestedInput = {
@@ -11785,6 +13807,90 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumMediaAssetTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaAssetType | EnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaAssetTypeFilter<$PrismaModel> | $Enums.MediaAssetType
+  }
+
+  export type NestedEnumMediaSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaSource | EnumMediaSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaSourceFilter<$PrismaModel> | $Enums.MediaSource
+  }
+
+  export type NestedEnumMediaAssetTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaAssetType | EnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaAssetType[] | ListEnumMediaAssetTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaAssetTypeWithAggregatesFilter<$PrismaModel> | $Enums.MediaAssetType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaAssetTypeFilter<$PrismaModel>
+    _max?: NestedEnumMediaAssetTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMediaSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MediaSource | EnumMediaSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MediaSource[] | ListEnumMediaSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumMediaSourceWithAggregatesFilter<$PrismaModel> | $Enums.MediaSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMediaSourceFilter<$PrismaModel>
+    _max?: NestedEnumMediaSourceFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type NestedEnumProviderFilter<$PrismaModel = never> = {
     equals?: $Enums.Provider | EnumProviderFieldRefInput<$PrismaModel>
     in?: $Enums.Provider[] | ListEnumProviderFieldRefInput<$PrismaModel>
@@ -11835,28 +13941,12 @@ export namespace Prisma {
     _min?: NestedEnumMessageRoleFilter<$PrismaModel>
     _max?: NestedEnumMessageRoleFilter<$PrismaModel>
   }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
 
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  export type NestedEnumPostStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -11870,11 +13960,41 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedEnumPostStatusFilter<$PrismaModel = never> = {
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumPostStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPostStatusFilter<$PrismaModel> | $Enums.PostStatus
+    not?: NestedEnumPostStatusWithAggregatesFilter<$PrismaModel> | $Enums.PostStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumPostStatusFilter<$PrismaModel>
+    _max?: NestedEnumPostStatusFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11889,16 +14009,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedEnumPostStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PostStatus | EnumPostStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PostStatus[] | ListEnumPostStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPostStatusWithAggregatesFilter<$PrismaModel> | $Enums.PostStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPostStatusFilter<$PrismaModel>
-    _max?: NestedEnumPostStatusFilter<$PrismaModel>
   }
 
   export type SessionCreateWithoutUserInput = {
@@ -11968,13 +14078,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
     message: MessageCreateNestedOneWithoutPostInput
     conversation: ConversationCreateNestedOneWithoutPostsInput
   }
@@ -11986,13 +14100,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
   }
 
   export type PostCreateOrConnectWithoutUserInput = {
@@ -12002,6 +14120,46 @@ export namespace Prisma {
 
   export type PostCreateManyUserInputEnvelope = {
     data: PostCreateManyUserInput | PostCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MediaAssetCreateWithoutUserInput = {
+    id?: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size?: number | null
+    width?: number | null
+    height?: number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MediaAssetUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size?: number | null
+    width?: number | null
+    height?: number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MediaAssetCreateOrConnectWithoutUserInput = {
+    where: MediaAssetWhereUniqueInput
+    create: XOR<MediaAssetCreateWithoutUserInput, MediaAssetUncheckedCreateWithoutUserInput>
+  }
+
+  export type MediaAssetCreateManyUserInputEnvelope = {
+    data: MediaAssetCreateManyUserInput | MediaAssetCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -12091,13 +14249,128 @@ export namespace Prisma {
     platform?: EnumPlatformFilter<"Post"> | $Enums.Platform
     content?: StringFilter<"Post"> | string
     hashtags?: StringNullableListFilter<"Post">
+    media?: JsonNullableFilter<"Post">
+    editedContent?: StringNullableFilter<"Post"> | string | null
     engagement?: JsonNullableFilter<"Post">
+    version?: IntFilter<"Post"> | number
+    isAccepted?: BoolFilter<"Post"> | boolean
+    isLastConversationPost?: BoolFilter<"Post"> | boolean
+    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     scheduledAt?: DateTimeNullableFilter<"Post"> | Date | string | null
-    status?: EnumPostStatusFilter<"Post"> | $Enums.PostStatus
-    isLastConversationPost?: BoolFilter<"Post"> | boolean
+  }
+
+  export type MediaAssetUpsertWithWhereUniqueWithoutUserInput = {
+    where: MediaAssetWhereUniqueInput
+    update: XOR<MediaAssetUpdateWithoutUserInput, MediaAssetUncheckedUpdateWithoutUserInput>
+    create: XOR<MediaAssetCreateWithoutUserInput, MediaAssetUncheckedCreateWithoutUserInput>
+  }
+
+  export type MediaAssetUpdateWithWhereUniqueWithoutUserInput = {
+    where: MediaAssetWhereUniqueInput
+    data: XOR<MediaAssetUpdateWithoutUserInput, MediaAssetUncheckedUpdateWithoutUserInput>
+  }
+
+  export type MediaAssetUpdateManyWithWhereWithoutUserInput = {
+    where: MediaAssetScalarWhereInput
+    data: XOR<MediaAssetUpdateManyMutationInput, MediaAssetUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type MediaAssetScalarWhereInput = {
+    AND?: MediaAssetScalarWhereInput | MediaAssetScalarWhereInput[]
+    OR?: MediaAssetScalarWhereInput[]
+    NOT?: MediaAssetScalarWhereInput | MediaAssetScalarWhereInput[]
+    id?: StringFilter<"MediaAsset"> | string
+    userId?: StringFilter<"MediaAsset"> | string
+    name?: StringFilter<"MediaAsset"> | string
+    url?: StringFilter<"MediaAsset"> | string
+    type?: EnumMediaAssetTypeFilter<"MediaAsset"> | $Enums.MediaAssetType
+    source?: EnumMediaSourceFilter<"MediaAsset"> | $Enums.MediaSource
+    size?: IntNullableFilter<"MediaAsset"> | number | null
+    width?: IntNullableFilter<"MediaAsset"> | number | null
+    height?: IntNullableFilter<"MediaAsset"> | number | null
+    metadata?: JsonNullableFilter<"MediaAsset">
+    isFavorite?: BoolFilter<"MediaAsset"> | boolean
+    createdAt?: DateTimeFilter<"MediaAsset"> | Date | string
+    updatedAt?: DateTimeFilter<"MediaAsset"> | Date | string
+  }
+
+  export type UserCreateWithoutMediaAssetsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    avatar?: string | null
+    role: $Enums.Role
+    isVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    conversations?: ConversationCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMediaAssetsInput = {
+    id?: string
+    name: string
+    email: string
+    password: string
+    avatar?: string | null
+    role: $Enums.Role
+    isVerified?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMediaAssetsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMediaAssetsInput, UserUncheckedCreateWithoutMediaAssetsInput>
+  }
+
+  export type UserUpsertWithoutMediaAssetsInput = {
+    update: XOR<UserUpdateWithoutMediaAssetsInput, UserUncheckedUpdateWithoutMediaAssetsInput>
+    create: XOR<UserCreateWithoutMediaAssetsInput, UserUncheckedCreateWithoutMediaAssetsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMediaAssetsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMediaAssetsInput, UserUncheckedUpdateWithoutMediaAssetsInput>
+  }
+
+  export type UserUpdateWithoutMediaAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    conversations?: ConversationUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMediaAssetsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -12112,6 +14385,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     conversations?: ConversationCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -12126,6 +14400,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -12156,6 +14431,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conversations?: ConversationUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -12170,6 +14446,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type MessageCreateWithoutConversationInput = {
@@ -12207,13 +14484,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
     message: MessageCreateNestedOneWithoutPostInput
     user: UserCreateNestedOneWithoutPostsInput
   }
@@ -12225,13 +14506,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
   }
 
   export type PostCreateOrConnectWithoutConversationInput = {
@@ -12256,6 +14541,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutConversationsInput = {
@@ -12270,6 +14556,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutConversationsInput = {
@@ -12345,6 +14632,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutConversationsInput = {
@@ -12359,6 +14647,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostCreateWithoutMessageInput = {
@@ -12366,13 +14655,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
     user: UserCreateNestedOneWithoutPostsInput
     conversation: ConversationCreateNestedOneWithoutPostsInput
   }
@@ -12384,13 +14677,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
   }
 
   export type PostCreateOrConnectWithoutMessageInput = {
@@ -12439,13 +14736,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutPostsNestedInput
   }
@@ -12457,13 +14758,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ConversationUpsertWithoutMessagesInput = {
@@ -12534,6 +14839,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     conversations?: ConversationCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -12548,6 +14854,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     conversations?: ConversationUncheckedCreateNestedManyWithoutUserInput
+    mediaAssets?: MediaAssetUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -12634,6 +14941,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     conversations?: ConversationUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -12648,6 +14956,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     conversations?: ConversationUncheckedUpdateManyWithoutUserNestedInput
+    mediaAssets?: MediaAssetUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ConversationUpsertWithoutPostsInput = {
@@ -12707,13 +15016,32 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
+  }
+
+  export type MediaAssetCreateManyUserInput = {
+    id?: string
+    name: string
+    url: string
+    type: $Enums.MediaAssetType
+    source: $Enums.MediaSource
+    size?: number | null
+    width?: number | null
+    height?: number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -12782,13 +15110,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
     message?: MessageUpdateOneRequiredWithoutPostNestedInput
     conversation?: ConversationUpdateOneRequiredWithoutPostsNestedInput
   }
@@ -12800,13 +15132,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PostUncheckedUpdateManyWithoutUserInput = {
@@ -12816,13 +15152,62 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type MediaAssetUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaAssetUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MediaAssetUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    type?: EnumMediaAssetTypeFieldUpdateOperationsInput | $Enums.MediaAssetType
+    source?: EnumMediaSourceFieldUpdateOperationsInput | $Enums.MediaSource
+    size?: NullableIntFieldUpdateOperationsInput | number | null
+    width?: NullableIntFieldUpdateOperationsInput | number | null
+    height?: NullableIntFieldUpdateOperationsInput | number | null
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    isFavorite?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MessageCreateManyConversationInput = {
@@ -12841,13 +15226,17 @@ export namespace Prisma {
     platform: $Enums.Platform
     content: string
     hashtags?: PostCreatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: number
+    isAccepted?: boolean
+    isLastConversationPost?: boolean
+    status?: $Enums.PostStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     publishedAt?: Date | string | null
     scheduledAt?: Date | string | null
-    status?: $Enums.PostStatus
-    isLastConversationPost: boolean
   }
 
   export type MessageUpdateWithoutConversationInput = {
@@ -12884,13 +15273,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
     message?: MessageUpdateOneRequiredWithoutPostNestedInput
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
   }
@@ -12902,13 +15295,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PostUncheckedUpdateManyWithoutConversationInput = {
@@ -12918,13 +15315,17 @@ export namespace Prisma {
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     content?: StringFieldUpdateOperationsInput | string
     hashtags?: PostUpdatehashtagsInput | string[]
+    media?: NullableJsonNullValueInput | InputJsonValue
+    editedContent?: NullableStringFieldUpdateOperationsInput | string | null
     engagement?: NullableJsonNullValueInput | InputJsonValue
+    version?: IntFieldUpdateOperationsInput | number
+    isAccepted?: BoolFieldUpdateOperationsInput | boolean
+    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
+    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-    isLastConversationPost?: BoolFieldUpdateOperationsInput | boolean
   }
 
 

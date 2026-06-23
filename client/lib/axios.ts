@@ -20,16 +20,13 @@ const refreshToken = async () => {
 
 api.interceptors.response.use((response) => response, async (error) => {
     const originalRequest = error.config
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true
         try {
-            const headers = { ...originalRequest.headers }
             await refreshToken()
-            return api.request({ ...originalRequest, headers })
-        } catch (err) {
-            console.log(err)
-            useAuthStore().logout()
-            return Promise.reject(err)
+            return api.request({ ...originalRequest })
+        } catch {
+            useAuthStore.getState().logout()
         }
     }
     return Promise.reject(error)

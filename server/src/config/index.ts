@@ -24,6 +24,20 @@ const _env = Object.freeze(z.object({
     MAIL_PASSWORD: z.string(),
     MAIL_ENCRYPTION: z.string(),
     FRONTEND_URL: z.string(),
+    OPENROUTER_API_KEY: z.string().optional(),
+    OPENROUTER_MODEL: z.string().optional(),
+    GROQ_API_KEY: z.string().optional(),
+    GROQ_MODEL: z.string().optional(),
+    TAVILY_API_KEY: z.string().optional(),
+    IMAGEKIT_PUBLIC_KEY: z.string().optional(),
+    IMAGEKIT_PRIVATE_KEY: z.string().optional(),
+    IMAGEKIT_URL_ENDPOINT: z.string().optional(),
+    GEMINI_API_KEY: z.string().optional(),
+    OPENAI_API_KEY: z.string().optional(),
+    AWS_ACCESS_KEY_ID: z.string().optional(),
+    AWS_SECRET_ACCESS_KEY: z.string().optional(),
+    AWS_REGION: z.string().optional(),
+    AWS_S3_BUCKET: z.string().optional(),
 }).parse(process.env));
 
 export default _env

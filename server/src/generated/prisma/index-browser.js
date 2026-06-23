@@ -132,6 +132,22 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.MediaAssetScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  url: 'url',
+  type: 'type',
+  source: 'source',
+  size: 'size',
+  width: 'width',
+  height: 'height',
+  metadata: 'metadata',
+  isFavorite: 'isFavorite',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserIdentityScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -191,13 +207,17 @@ exports.Prisma.PostScalarFieldEnum = {
   platform: 'platform',
   content: 'content',
   hashtags: 'hashtags',
+  media: 'media',
+  editedContent: 'editedContent',
   engagement: 'engagement',
+  version: 'version',
+  isAccepted: 'isAccepted',
+  isLastConversationPost: 'isLastConversationPost',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   publishedAt: 'publishedAt',
-  scheduledAt: 'scheduledAt',
-  status: 'status',
-  isLastConversationPost: 'isLastConversationPost'
+  scheduledAt: 'scheduledAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -230,6 +250,20 @@ exports.Role = exports.$Enums.Role = {
   USER: 'USER'
 };
 
+exports.MediaAssetType = exports.$Enums.MediaAssetType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT',
+  BANNER: 'BANNER',
+  CAROUSEL: 'CAROUSEL',
+  THUMBNAIL: 'THUMBNAIL'
+};
+
+exports.MediaSource = exports.$Enums.MediaSource = {
+  GENERATED: 'GENERATED',
+  UPLOADED: 'UPLOADED'
+};
+
 exports.Provider = exports.$Enums.Provider = {
   GOOGLE: 'GOOGLE',
   GITHUB: 'GITHUB'
@@ -254,6 +288,7 @@ exports.PostStatus = exports.$Enums.PostStatus = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  MediaAsset: 'MediaAsset',
   UserIdentity: 'UserIdentity',
   EmailOtp: 'EmailOtp',
   Session: 'Session',
